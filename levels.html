@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rebus Puzzle Game - Topics</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="topics" id="topicSelection">
+    <h1>Choose a Puzzle Topic</h1>
+
+    <div class="topic-buttons">
+        <button onclick="startPuzzle('Topic 1')">Topic 1</button>
+        <button onclick="startPuzzle('Topic 2')">Topic 2</button>
+        <button onclick="startPuzzle('Topic 3')">Topic 3</button>
+        <button onclick="startPuzzle('Topic 4')">Topic 4</button>
+        <button onclick="startPuzzle('Topic 5')">Topic 5</button>
+        <button onclick="startPuzzle('Topic 6')">Topic 6</button>
+    </div>
+
+    <!-- BACK + QUIT buttons container -->
+    <div class="bottom-buttons">
+        <button class="back-btn" onclick="history.back()">Back</button>
+        <button class="quit-btn" onclick="showQuitPopup()">Quit</button>
+    </div>
+</div>
+
+<!-- Quit Confirmation Popup -->
+<div id="quitPopup" class="quit-popup" style="display:none;">
+    <div class="quit-dialog">
+        <p>Are you sure you want to quit?</p>
+        <button onclick="closeQuitPopup()">Cancel</button>
+        <button onclick="quitGame()">Quit</button>
+    </div>
+</div>
+
+<script>
+function startPuzzle(topic) {
+    alert("You selected: " + topic);
+}
+
+function showQuitPopup() {
+    document.getElementById("quitPopup").style.display = "flex";
+}
+
+function closeQuitPopup() {
+    document.getElementById("quitPopup").style.display = "none";
+}
+
+function quitGame() {
+    window.location.href = 'index.html';
+}
+</script>
+
+</body>
+</html>
+
+
