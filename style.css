@@ -1,4 +1,4 @@
-
+/* ---------- Global Styles ---------- */
 html, body {
     margin: 0;
     padding: 0;
@@ -7,7 +7,14 @@ html, body {
     overflow: hidden;
     background: #b40e0e;
     font-family: 'Tempus Sans ITC', cursive;
+}
+
+/* Center ONLY the welcome page */
+#welcome {
+    height: 100%;
+    width: 100%;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 }
@@ -33,9 +40,152 @@ button {
     background: #1f2327;
     cursor: pointer;
     margin-top: 20px;
+    transition: background 0.3s ease;
 }
 
 button:hover {
     background: #071d36;
+}
+
+
+
+
+
+
+
+
+
+/* ---------- Levels / Topics Page ---------- */
+.topics {
+    height: 100vh;               
+    display: flex;               
+    flex-direction: column;      
+    justify-content: center;     
+    align-items: center;         
+    text-align: center;
+    padding: 0 20px;
+}
+
+.topic-buttons {
+    display: grid;
+    grid-template-columns: repeat(3, 350px); 
+    grid-auto-rows: 200px;           /* row height */
+    gap: 20px;
+    justify-content: center;         
+    place-items: center;            
+}
+
+.topic-buttons button {
+    width: 100%;
+    height: 100%;
+    font-size: 1.7rem;
+    border-radius: 8px;
+    padding: 0;
+    background: #0d2236;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+}
+
+.topic-buttons button:hover {
+    background: #071d36;
+    transform: scale(1.03);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+
+
+
+
+/* ---------- Back & Start Buttons ---------- */
+button.back-btn,
+button.start-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    background: #1f2327;
+    color: white;
+    cursor: pointer;
+    font-size: 1.5rem;
+}
+
+button.back-btn:hover,
+button.start-btn:hover {
+    background: #071d36;
+}
+
+
+
+
+
+/* ---------- Bottom Buttons Container ---------- */
+.bottom-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+
+
+
+/* ---------- Quit Button ---------- */
+button.quit-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    background: #8b0000;
+    color: white;
+    cursor: pointer;
+    font-size: 1.5rem;
+}
+
+
+
+
+button.quit-btn:hover {
+    background: #5c0000;
+}
+
+
+
+
+/* ---------- Quit Confirmation Popup ---------- */
+.quit-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.quit-dialog {
+    background: #1f2327;
+    padding: 20px 30px;
+    border-radius: 12px;
+    text-align: center;
+    color: white;
+    font-size: 1.3rem;
+}
+
+.quit-dialog button {
+    margin: 10px;
+    padding: 10px 20px;
+    background: #b40e0e;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    color: white;
+    font-size: 1rem;
+}
+
+.quit-dialog button:hover {
+    background: #7a0000;
 }
 
