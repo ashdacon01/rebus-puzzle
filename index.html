@@ -10,7 +10,20 @@
     <div class="slide" id="welcome">
         <img src="../images/welcome.png" class="welcome-img" alt="Welcome Image">
         <p>Get ready to test your brain with fun puzzles!</p>
-        <button onclick="alert('Game will start soon!')">Start Game</button>
+
+        <div class="bottom-buttons">
+            <button class="start-btn" onclick="window.location.href='levels.html'">Start Game</button>
+            <button class="quit-btn" onclick="quitGame()">Quit</button>
+        </div>
     </div>
+
+<script>
+function quitGame() {
+    if (confirm("Are you sure you want to quit?")) {
+        window.close();
+        setTimeout(() => window.location.href = "about:blank", 100);
+    }
+}
+</script>
 </body>
 </html>
