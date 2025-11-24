@@ -20,7 +20,7 @@ body.show { opacity: 1; }
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: auto;        /* remove 100% height so content dictates spacing */
+    height: auto;
     padding: 20px;
     box-sizing: border-box;
 }
@@ -49,14 +49,13 @@ body.show { opacity: 1; }
 .nav-buttons {
     display: flex;
     gap: 5px;
-    margin-top: 20px;   /* ⬅ pushes Prev/Next downward */
-    margin-bottom: 10px; /* optional, adds a bit of spacing */
+    margin-top: 20px;
+    margin-bottom: 10px;
 }
-
 
 #hintText {
     margin: 2px 0;
-    min-height: 30px;   /* ⬅ FIX: reserves space so layout never moves */
+    min-height: 30px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -70,12 +69,12 @@ body.show { opacity: 1; }
     display: flex;
     gap: 15px;
     justify-content: center;
-    margin-top: -10px;   /* ⬅⬅⬅ pull upward */
-    transform: translateY(-20px);  /* ⬅⬅⬅ raise more */
+    margin-top: -10px;
+    transform: translateY(-20px);
 }
 
 .hint-container {
-    height: 35px;              /* reserve space so nothing moves */
+    height: 35px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -83,7 +82,6 @@ body.show { opacity: 1; }
 }
 
 #result { font-size: 1.4rem; min-height: 1.2em; text-align: center; }
-
 
 input[type="text"] {
     padding: 12px;
@@ -111,17 +109,21 @@ input[type="text"] {
     min-width: 300px;
 }
 
-.quit-buttons {
-    display:flex;
-    gap:20px;
-    justify-content:center;
-    margin-top:20px;
-}
-
-.quit-buttons button {
-    padding:10px 20px;
-    font-size:1.2rem;
-    cursor:pointer;
+/* Embossed popup message */
+.medium-popup {
+    position: fixed;
+    top:0; left:0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.65);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    color: white;
+    font-size: 2rem;
+    font-weight: bold;
+    text-shadow: 3px 3px 8px black;
+    cursor: pointer;
 }
 </style>
 </head>
@@ -134,13 +136,10 @@ input[type="text"] {
         <img id="puzzleImage" src="" alt="Rebus Image">
     </div>
 
-    <!-- Show Hint above the navigation buttons -->
     <button id="hintBtn">Show Hint</button>
     <div class="hint-container">
-    <p id="hintText"></p>
-</div>
-
-
+        <p id="hintText"></p>
+    </div>
 
     <div class="nav-buttons">
         <button id="prevImg">⏮ Prev</button>
@@ -192,6 +191,62 @@ function transitionBack() {
     setTimeout(() => window.location.href = `difficulty.html?category=${encodeURIComponent(category)}`, 300);
 }
 
+// Simple confetti burst
+function triggerConfetti() {
+    const canvas = document.createElement("canvas");
+    canvas.id = "confettiCanvas";
+    canvas.style.position = "fixed";
+    canvas.style.top = 0;
+    canvas.style.left = 0;
+    canvas.style.width = "100%";
+    canvas.style.height = "100%";
+    canvas.style.pointerEvents = "none";
+    canvas.style.zIndex = 1500;
+
+    document.body.appendChild(canvas);
+
+    const ctx = canvas.getContext("2d");
+    const pieces = [];
+
+    for (let i = 0; i < 150; i++) {
+        pieces.push({
+            x: Math.random() * window.innerWidth,
+            y: Math.random() * -50,
+            size: 5 + Math.random() * 8,
+            speed: 2 + Math.random() * 4
+        });
+    }
+
+    function update() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        pieces.forEach(p => {
+            p.y += p.speed;
+            ctx.fillStyle = `hsl(${Math.random() * 360},100%,50%)`;
+            ctx.fillRect(p.x, p.y, p.size, p.size);
+        });
+
+        requestAnimationFrame(update);
+    }
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    update();
+
+    setTimeout(() => canvas.remove(), 2500);
+}
+
+// Embossed popup message
+function showMediumPopup() {
+    const pop = document.createElement("div");
+    pop.className = "medium-popup";
+    pop.textContent = "Are you ready for the medium round?";
+    
+    pop.onclick = () => pop.remove();
+
+    document.body.appendChild(pop);
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     document.body.classList.add("show");
 
@@ -212,8 +267,6 @@ document.addEventListener("DOMContentLoaded", () => {
         {img: "images/brand_easy9.png", answer: "Python"},
         {img: "images/brand_easy10.png", answer: "Oreo"}
     ];
-
-
 
     let currentIndex = 0;
     const puzzleImage = document.getElementById("puzzleImage");
@@ -237,6 +290,12 @@ document.addEventListener("DOMContentLoaded", () => {
         hintText.style.display = "block";
         hintText.textContent = `Answer: ${imagesArray[currentIndex].answer}`;
         hintBtn.disabled = true;
+
+        // LAST PUZZLE → CONFETTI → MESSAGE POPUP
+        if (currentIndex === imagesArray.length - 1) {
+            triggerConfetti();
+            setTimeout(() => showMediumPopup(), 1800);
+        }
     });
 
     showImage(0);
