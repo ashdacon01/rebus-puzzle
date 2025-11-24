@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta-name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Difficulty</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="difficulty-page fade">
+
+    <h1 id="categoryTitle" class="difficulty-title">Select Difficulty</h1>
+
+    <!-- Difficulty Tiles -->
+    <div class="difficulty-grid">
+        <button class="difficulty-tile" onclick="selectDifficulty('easy')">
+            <span>Easy</span>
+        </button>
+
+        <button class="difficulty-tile" onclick="selectDifficulty('medium')">
+            <span>Medium</span>
+        </button>
+
+        <button class="difficulty-tile" onclick="selectDifficulty('hard')">
+            <span>Hard</span>
+        </button>
+    </div>
+
+    <!-- Back / Quit -->
+    <div class="bottom-buttons">
+        <button class="back-btn" onclick="transitionBack()">Back</button>
+        <button class="quit-btn" onclick="quitGame()">Quit</button>
+    </div>
+
+
+    <script>
+        // PAGE FADE + CATEGORY SETUP
+        document.addEventListener("DOMContentLoaded", () => {
+            document.body.classList.add("show");
+
+            const params = new URLSearchParams(window.location.search);
+            const category = params.get("category");
+
+            if (!category) {
+                setTimeout(() => window.location.href = "categories.html", 300);
+                return;
+            }
+
+            document.getElementById("categoryTitle").textContent =
+                `Select Difficulty - ${category}`;
+
+            localStorage.setItem("category", category);
+        });
+
+        // DIFFICULTY SELECT
+        function selectDifficulty(level) {
+            localStorage.setItem("difficulty", level);
+            document.body.classList.remove("show");
+            setTimeout(() => window.location.href = "puzzle.html", 300);
+        }
+
+        // BACK BUTTON
+        function transitionBack() {
+            document.body.classList.remove("show");
+            setTimeout(() => window.location.href = "categories.html", 300);
+        }
+    </script>
+
+    <script src="javascript.js"></script>
+
+</body>
+</html>
