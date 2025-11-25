@@ -5,7 +5,123 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Rebus Puzzle Game - Topics</title>
 <link rel="stylesheet" href="style.css">
+
 <style>
+/* ---------- Categories Page CSS ---------- */
+
+.topics {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    text-align: center;
+    padding: 50px 20px 40px 20px;
+}
+
+.topics h1 {
+    margin-bottom: 60px;
+    font-size: 3rem;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+}
+
+/* Tiles Grid */
+.topic-buttons {
+    display: grid;
+    grid-template-columns: repeat(3, 350px);
+    grid-auto-rows: 230px;
+    gap: 40px 60px;
+    justify-content: center;
+}
+
+/* Each Tile (Button) */
+.topic-buttons button {
+    width: 100%;
+    height: 100%;
+    background: #0d2236;
+    border: 3px solid #00000040;
+    border-radius: 14px;
+    cursor: pointer;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+
+    padding: 10px;
+    transition: 0.3s ease;
+    color: white;
+    position: relative;
+}
+
+/* Tile Images */
+.topic-buttons button img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+/* Tile Text */
+.topic-buttons button span {
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+    text-align: center;
+    font-family: 'Tempus Sans ITC', cursive;
+}
+
+/* Tile Hover */
+.topic-buttons button:hover {
+    background: #071d36;
+    transform: scale(1.06);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.35);
+}
+
+/* Back & Quit Buttons */
+button.back-btn,
+button.start-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    background: #1f2327;
+    color: white;
+    cursor: pointer;
+    font-size: 1.5rem;
+}
+
+button.back-btn:hover,
+button.start-btn:hover {
+    background: #071d36;
+}
+
+/* Bottom Buttons Container */
+.bottom-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 60px;
+}
+
+/* Quit Button */
+button.quit-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    background: #8b0000;
+    color: white;
+    cursor: pointer;
+    font-size: 1.5rem;
+}
+
+button.quit-btn:hover {
+    background: #5c0000;
+}
+
+/* Fade-in animation for page */
 body {
     opacity: 0;
     transition: opacity 0.5s ease-in-out;
@@ -21,32 +137,31 @@ body.show {
     <h1>Choose a Puzzle Topic</h1>
 
     <div class="topic-buttons">
-    <button class="category-btn" data-category="Brand Logos">
-        <img src="images/brand.png" alt="Brand Logos" class="topic-img">
-        <span>Brand</span>
-    </button>
-    <button class="category-btn" data-category="Movies">
-        <img src="images/movie.png" alt="Movies" class="topic-img">
-        <span>Movies</span>
-    </button>
-    <button class="category-btn" data-category="Music">
-        <img src="images/music.png" alt="Music" class="topic-img">
-        <span>Music</span>
-    </button>
-    <button class="category-btn" data-category="Idioms">
-        <img src="images/idioms.png" alt="Idioms" class="topic-img">
-        <span>Idioms</span>
-    </button>
-    <button class="category-btn" data-category="Animals">
-        <img src="images/animals.png" alt="Animals" class="topic-img">
-        <span>Animals</span>
-    </button>
-    <button class="category-btn" data-category="Food">
-        <img src="images/food.png" alt="Food" class="topic-img">
-        <span>Food</span>
-    </button>
-</div>
-
+        <button class="category-btn" data-category="Brand Logos">
+            <img src="images/brand.png" alt="Brand Logos" class="topic-img">
+            <span>Brand</span>
+        </button>
+        <button class="category-btn" data-category="Movies">
+            <img src="images/movie.png" alt="Movies" class="topic-img">
+            <span>Movies</span>
+        </button>
+        <button class="category-btn" data-category="Music">
+            <img src="images/music.png" alt="Music" class="topic-img">
+            <span>Music</span>
+        </button>
+        <button class="category-btn" data-category="Idioms">
+            <img src="images/idioms.png" alt="Idioms" class="topic-img">
+            <span>Idioms</span>
+        </button>
+        <button class="category-btn" data-category="Animals">
+            <img src="images/animals.png" alt="Animals" class="topic-img">
+            <span>Animals</span>
+        </button>
+        <button class="category-btn" data-category="Food">
+            <img src="images/food.png" alt="Food" class="topic-img">
+            <span>Food</span>
+        </button>
+    </div>
 
     <div class="bottom-buttons">
         <button class="back-btn" onclick="transitionBack()">Back</button>
@@ -55,7 +170,6 @@ body.show {
 </div>
 
 <script>
-// Fade-in animation
 document.addEventListener("DOMContentLoaded", () => {
     document.body.classList.add("show");
 
@@ -71,16 +185,11 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-// Back transition
 function transitionBack() {
     document.body.classList.remove("show");
     setTimeout(() => window.location.href = "index.html", 300);
 }
-
-// ❗ Quit now handled completely by quitGame() in script.js
-
 </script>
-
 
 <script src="javascript.js"></script>
 
