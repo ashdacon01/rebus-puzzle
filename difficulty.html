@@ -2,16 +2,47 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta-name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Select Difficulty</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Quit Modal Styles */
+        .modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center;
+            opacity: 0; pointer-events: none; transition: opacity 0.3s;
+        }
+        .modal.show { opacity: 1; pointer-events: auto; }
+
+        .modal-content {
+            background: #1f2327; padding: 30px; border-radius: 12px;
+            text-align: center; color: white; min-width: 300px;
+        }
+        .modal-buttons { display: flex; gap: 20px; justify-content: center; margin-top: 20px; }
+        .modal-buttons button { padding: 10px 20px; font-size: 1.2rem; }
+
+        /* Updated Quit button design */
+        .quit-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            background: #8b0000;
+            color: white;
+            cursor: pointer;
+            font-size: 1.3rem;
+            transition: 0.3s;
+        }
+
+        .quit-btn:hover {
+            background: #5c0000;
+        }
+    </style>
 </head>
 
 <body class="difficulty-page fade">
 
     <h1 id="categoryTitle" class="difficulty-title">Select Difficulty</h1>
 
-    <!-- Difficulty Tiles -->
     <div class="difficulty-grid">
         <button class="difficulty-tile" onclick="selectDifficulty('easy')">
             <span>Easy</span>
@@ -26,15 +57,23 @@
         </button>
     </div>
 
-    <!-- Back / Quit -->
     <div class="bottom-buttons">
         <button class="back-btn" onclick="transitionBack()">Back</button>
-        <button class="quit-btn" onclick="quitGame()">Quit</button>
+        <button class="quit-btn" id="quitBtn">Quit</button>
     </div>
 
+    <!-- Quit Confirmation Modal -->
+    <div id="quitModal" class="modal">
+        <div class="modal-content">
+            <p>Are you sure you want to quit?</p>
+            <div class="modal-buttons">
+                <button id="confirmQuit">Yes</button>
+                <button id="cancelQuit">No</button>
+            </div>
+        </div>
+    </div>
 
     <script>
-        // PAGE FADE + CATEGORY SETUP
         document.addEventListener("DOMContentLoaded", () => {
             document.body.classList.add("show");
 
@@ -50,23 +89,38 @@
                 `Select Difficulty - ${category}`;
 
             localStorage.setItem("category", category);
+
+            // Modal quit buttons
+            const quitBtn = document.getElementById("quitBtn");
+            const quitModal = document.getElementById("quitModal");
+            const confirmQuit = document.getElementById("confirmQuit");
+            const cancelQuit = document.getElementById("cancelQuit");
+
+            quitBtn.addEventListener("click", () => quitModal.classList.add("show"));
+            cancelQuit.addEventListener("click", () => quitModal.classList.remove("show"));
+            confirmQuit.addEventListener("click", () => {
+                document.body.classList.remove("show");
+                quitModal.classList.remove("show");
+                setTimeout(() => window.location.href = "index.html", 300);
+            });
         });
 
-        // DIFFICULTY SELECT
         function selectDifficulty(level) {
             localStorage.setItem("difficulty", level);
+            localStorage.setItem("fromDifficulty", "yes");
+
             document.body.classList.remove("show");
-            setTimeout(() => window.location.href = "puzzle.html", 300);
+            setTimeout(() => {
+                const category = localStorage.getItem("category");
+                window.location.href = `puzzle.html?category=${encodeURIComponent(category)}`;
+            }, 300);
         }
 
-        // BACK BUTTON
         function transitionBack() {
             document.body.classList.remove("show");
             setTimeout(() => window.location.href = "categories.html", 300);
         }
     </script>
-
-    <script src="javascript.js"></script>
 
 </body>
 </html>
