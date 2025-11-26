@@ -7,6 +7,11 @@ html, body {
     overflow: hidden;
     background: #b40e0e;
     font-family: 'Tempus Sans ITC', cursive;
+
+    /* FIX ADDED */
+    display: flex;
+    flex-direction: column;
+    justify-content: stretch;
 }
 
 /* Center ONLY the welcome page */
