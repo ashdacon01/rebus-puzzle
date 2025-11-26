@@ -42,16 +42,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Keep the same imagesArray you already defined in puzzle.html
     const imagesArray = [
-        {img: "../images/brand_easy1.png", answer: "Apple"},
-        {img: "../images/brand_easy2.png", answer: "Nike"},
-        {img: "../images/brand_easy3.png", answer: "Disneyland"},
-        {img: "../images/brand_easy4.png", answer: "Starbucks"},
-        {img: "../images/brand_easy5.png", answer: "Firefox"},
-        {img: "../images/brand_easy6.png", answer: "Twitter"},
-        {img: "../images/brand_easy7.png", answer: "FedEx"},
-        {img: "../images/brand_easy8.png", answer: "Sprite"},
-        {img: "../images/brand_easy9.png", answer: "Python"},
-        {img: "../images/brand_easy10.png", answer: "Oreo"}
+        { img: "images/Brand/Easy/apple.png", answer: "Apple" },
+        { img: "images/Brand/Easy/nike.png", answer: "Nike" },
+        { img: "images/Brand/Easy/disneyland.png", answer: "Disneyland" },
+        { img: "images/Brand/Easy/starbucks.png", answer: "Starbucks" },
+        { img: "images/Brand/Easy/firefox.png", answer: "Firefox" },
+        { img: "images/Brand/Easy/twitter.png", answer: "Twitter" },
+        { img: "images/Brand/Easy/fedex.png", answer: "FedEx" },
+        { img: "images/Brand/Easy/sprite.png", answer: "Sprite" },
+        { img: "images/Brand/Easy/python.png", answer: "Python" },
+        { img: "images/Brand/Easy/oreo.png", answer: "Oreo" }
     ];
 
     let currentIndex = 0;
