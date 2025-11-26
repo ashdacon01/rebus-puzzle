@@ -205,12 +205,23 @@ function triggerConfetti() {
     setTimeout(()=>canvas.remove(),2500);
 }
 
+// ==== UPDATED READY POPUP AT END OF GAME WITH CATEGORY & QUIT BUTTONS ====
 function showMediumPopup() {
     const pop = document.createElement("div");
     pop.className = "medium-popup";
-    pop.textContent = "Get ready for more puzzles!";
-    pop.onclick = () => pop.remove();
+    pop.innerHTML = `
+        <div style="text-align:center;">
+            <p style="font-size:3rem; margin-bottom:30px;">Want to play more?</p>
+            <div style="display:flex; justify-content:center; gap:20px;">
+                <button id="categoryBtn" style="padding:12px 24px; font-size:1.5rem; border-radius:8px;">Category</button>
+                <button id="quitBtn" style="padding:12px 24px; font-size:1.5rem; border-radius:8px;">Quit</button>
+            </div>
+        </div>
+    `;
     document.body.appendChild(pop);
+
+    document.getElementById("categoryBtn").onclick = () => window.location.href = "categories.html";
+    document.getElementById("quitBtn").onclick = () => window.location.href = "index.html";
 }
 
 document.addEventListener("DOMContentLoaded",()=>{
@@ -225,15 +236,13 @@ document.addEventListener("DOMContentLoaded",()=>{
         initGame();
     });
 
-    // NEW READY POPUP QUIT
-    quitReadyBtn.addEventListener("click", ()=>{
-        window.location.href = "categories.html";
-    });
+    quitReadyBtn.addEventListener("click", ()=>{ window.location.href = "categories.html"; });
 });
 
 function initGame(){
     const category = getQueryParam("category") || "Brand Logos";
     document.getElementById("puzzleTitle").textContent = category;
+
 
     const puzzleSets = {
 
@@ -371,40 +380,52 @@ function initGame(){
             { img: "images/dangerous_animals.png", answer: "Dangerous Animals" },
             { img: "images/extinct_animals.png", answer: "Extinct Animals" },
             { img: "images/dinosaur.png", answer: "Dinosaur" }
+        ],
+        "Sports": [
+            { img: "images/marathon.png", answer: "Marathon" },
+            { img: "images/soccer.png", answer: "Soccer" },
+            { img: "images/basketball.png", answer: "Basketball" },
+            { img: "images/tennis.png", answer: "Tennis" },
+            { img: "images/swimming.png", answer: "Swimming" },
+            { img: "images/boxing.png", answer: "Boxing" },
+            { img: "images/golf.png", answer: "Golf" },
+            { img: "images/ice_hockey.png", answer: "Ice Hockey" },
+            { img: "images/archery.png", answer: "Archery" },
+            { img: "images/rock_climbing.png", answer: "Rock Climbing" },
 
+            { img: "images/downhill_skiing.png", answer: "Downhill Skiing" },
+            { img: "images/fishing.png", answer: "Fishing" },
+            { img: "images/longboard_surfing.png", answer: "Longboard Surfing" },
+            { img: "images/100_meter_sprint.png", answer: "100 Meter Sprint" },
+            { img: "images/weightlifting.png", answer: "Weightlifting" },
+            { img: "images/road_cycling.png", answer: "Road Cycling" },
+            { img: "images/fencing.png", answer: "Fencing" },
+            { img: "images/water_volleyball.png", answer: "Water Volleyball" },
+            { img: "images/gymnastics.png", answer: "Gymnastics" },
+            { img: "images/hurdles.png", answer: "Hurdles" },
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            { img: "images/ice_curling.png", answer: "Ice Curling" },
+            { img: "images/track_relay.png", answer: "Track Relay" },
+            { img: "images/long_jump.png", answer: "Long Jump" },
+            { img: "images/equestrian_target.png", answer: "Equestrian Target" },
+            { img: "images/kickboxing.png", answer: "Kickboxing" },
+            { img: "images/karate.png", answer: "Karate" },
+            { img: "images/judo.png", answer: "Judo" },
+            { img: "images/sepak_takraw.png", answer: "Sepak Takraw" },
+            { img: "images/cricket.png", answer: "Cricket" },
+            { img: "images/sumo_wrestling.png", answer: "Sumo Wrestling" },
         ],
         "Food": [
             { img:"images/movie_avengers.png", answer:"Avengers" },
+
         ]
+
+
+
+
     };
 
-    const imagesArray = puzzleSets[category];
+      const imagesArray = puzzleSets[category];
     let currentIndex = 0;
 
     const puzzleImage = document.getElementById("puzzleImage");

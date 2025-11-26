@@ -13,8 +13,8 @@ const puzzleAnswers = {
     "Movie": {
         easy: ["movie1answer", "movie2answer"]
     },
-    "Music": {
-        easy: ["music1answer", "music2answer"]
+    "Sports": {
+        easy: ["Sports1answer", "Sports2answer"]
     },
     "Idioms": {
         easy: ["idiom1answer", "idiom2answer"]
