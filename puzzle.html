@@ -282,13 +282,8 @@ function triggerConfetti() {
     const answerPopup = document.getElementById("answerPopup");
     answerPopup.appendChild(canvas);
     const ctx = canvas.getContext("2d");
-    const pieces=[];
-    for(let i=0;i<150;i++){ pieces.push({ x: Math.random()*canvas.clientWidth, y: Math.random()*-50, size:5+Math.random()*8, speed:2+Math.random()*4 }); }
-    function update() {
-        ctx.clearRect(0,0,canvas.width,canvas.height);
-        pieces.forEach(p=>{ p.y+=p.speed; ctx.fillStyle=`hsl(${Math.random()*360},100%,50%)`; ctx.fillRect(p.x,p.y,p.size,p.size); });
-        requestAnimationFrame(update);
-    }
+    const pieces=[]; for(let i=0;i<150;i++){ pieces.push({ x: Math.random()*canvas.clientWidth, y: Math.random()*-50, size:5+Math.random()*8, speed:2+Math.random()*4 }); }
+    function update() { ctx.clearRect(0,0,canvas.width,canvas.height); pieces.forEach(p=>{ p.y+=p.speed; ctx.fillStyle=`hsl(${Math.random()*360},100%,50%)`; ctx.fillRect(p.x,p.y,p.size,p.size); }); requestAnimationFrame(update); }
     canvas.width = answerPopup.clientWidth;
     canvas.height = answerPopup.clientHeight;
     update();
@@ -308,7 +303,6 @@ function showMediumPopup() {
         </div>
     `;
     document.body.appendChild(pop);
-
     document.getElementById("categoryBtn").onclick = () => window.location.href = "categories.html";
     document.getElementById("quitBtn").onclick = () => window.location.href = "index.html";
 }
@@ -335,8 +329,175 @@ function initGame(){
     const puzzleSets = {
         "Brand Logos": [
             { img:"images/brand_apple.png", answer:"Apple" },
-            { img:"images/brand_disneyland.png", answer:"Disneyland" }
+            { img:"images/brand_disneyland.png", answer:"Disneyland" },
+                        { img:"images/brand_fedex.png", answer:"FedEx" },
+            { img:"images/brand_firefox.png", answer:"Firefox" },
+            { img:"images/brand_nike.png", answer:"Nike" },
+            { img:"images/brand_oreo.png", answer:"Oreo" },
+            { img:"images/brand_python.png", answer:"Python" },
+            { img:"images/brand_sprite.png", answer:"Sprite" },
+            { img:"images/brand_starbucks.png", answer:"Starbucks" },
+            { img:"images/brand_twitter.png", answer:"Twitter" },
+            { img:"images/brand_facebook.png", answer:"Facebook" },
+            { img:"images/brand_lego.png", answer:"Lego" },
+            { img:"images/brand_paypal.png", answer:"PayPal" },
+            { img:"images/brand_pepsi.png", answer:"Pepsi" },
+            { img:"images/brand_pinterest.png", answer:"Pinterest" },
+            { img:"images/brand_redbull.png", answer:"RedBull" },
+            { img:"images/brand_samsung.png", answer:"Samsung" },
+            { img:"images/brand_shell.png", answer:"Shell" },
+            { img:"images/brand_snapchat.png", answer:"Snapchat" },
+            { img:"images/brand_subway.png", answer:"Subway" },
+            { img:"images/brand_fujifilm.png", answer:"Fujifilm" },
+            { img:"images/brand_rolex.png", answer:"Rolex" },
+            { img:"images/brand_intel.png", answer:"Intel" },
+            { img:"images/brand_cornetto.png", answer:"Cornetto" },
+            { img:"images/brand_drpepper.png", answer:"Dr Pepper" },
+            { img:"images/brand_lamborgini.png", answer:"Lamborghini" },
+            { img:"images/brand_microsoft.png", answer:"Microsoft" },
+            { img:"images/brand_lipton.png", answer:"Lipton" },
+            { img:"images/brand_mitsubishi.png", answer:"Mitsubishi" },
+            { img:"images/brand_hermes.png", answer:"Hermès" }
+        ],
+
+        "Movies": [
+            { img:"images/ghost_rider.png", answer:"Ghost Rider" },
+            { img:"images/bee_movie.png", answer:"Bee Movie" },
+            { img:"images/lion_king.png", answer:"Lion King" },
+            { img:"images/spider_man.png", answer:"Spider Man" },
+            { img:"images/ant_man.png", answer:"Ant Man" },
+            { img:"images/king_of_speech.png", answer:"King Of Speech" },
+            { img:"images/car_2.png", answer:"Car 2" },
+            { img:"images/girl_in_the_next_door.png", answer:"Girl In The Next Door" },
+            { img:"images/rocket_man.png", answer:"Rocket Man" },
+            { img:"images/ice_man.png", answer:"Ice Man" },
+
+            { img:"images/ghost_call.png", answer:"Ghost Call" },
+            { img:"images/back_to_future.png", answer:"Back To Future" },
+            { img:"images/karate_kid.png", answer:"Karate Kid" },
+            { img:"images/a_beautiful_mind.png", answer:"A Beautiful Mind" },
+            { img:"images/social_web.png", answer:"Social Web" },
+            { img:"images/she_is_gone.png", answer:"She Is Gone" },
+            { img:"images/iniside_out.png", answer:"Iniside Out" },
+            { img:"images/no_county_for_oldman.png", answer:"No County For Oldman" },
+            { img:"images/parasite.png", answer:"Parasite" },
+            { img:"images/blade_runner.png", answer:"Blade Runner" },
+
+            { img:"images/pirate_adventure.png", answer:"Pirate Adventure" },
+            { img:"images/she's_reading_part_2.png", answer:"She's Reading Part 2" },
+            { img:"images/7_king_speech.png", answer:"7 King Speech" },
+            { img:"images/rocketman_to_star.png", answer:"Rocketman To Star" },
+            { img:"images/charlie_chocolate_factory.png", answer:"Charlie Chocolate Factory" },
+            { img:"images/seven_ghost_in_the_house.png", answer:"Seven Ghost In The House" },
+            { img:"images/eye_love_alien.png", answer:"Eye Love Alien" },
+            { img:"images/3_alien_in_the_space.png", answer:"3 Alien In The Space" },
+            { img:"images/eye_love_small.png", answer:"Eye Love Small" },
+            { img:"images/now_you_see_me.png", answer:"Now You See Me" }
+
+        ],
+        "Idioms": [
+            { img:"images/walking_on_eggshells.png", answer:"Walking on Eggshells" },
+            { img:"images/a_bright_idea.png", answer:"A Bright Idea" },
+            { img:"images/butter_someone_up.png", answer:"Butter Someone Up" },
+            { img:"images/breadwinner.png", answer:"Breadwinner" },
+            { img:"images/time_to_sleep.png", answer:"Time to Sleep" },
+            { img:"images/brainstorm.png", answer:"Brainstorm" },
+            { img:"images/belief.png", answer:"Belief" },
+            { img:"images/firehouse.png", answer:"Firehouse" },
+            { img:"images/icebox.png", answer:"Icebox" },
+            { img:"images/follow_your_heart.png", answer:"Follow Your Heart" },
+            { img:"images/elephant_in_the_room.png", answer:"Elephant in the Room" },
+            { img:"images/it's_raining_cats_and_dogs.png", answer:"It's Raining Cats and Dogs" },
+            { img:"images/don't_let_the_bedbugs_bite.png", answer:"Don't Let the Bedbugs Bite" },
+            { img:"images/break_the_ice.png", answer:"Break the Ice" },
+            { img:"images/hit_the_hay.png", answer:"Hit the Hay" },
+            { img:"images/time_heals_all_wounds.png", answer:"Time Heals All Wounds" },
+            { img:"images/playing_with_fire.png", answer:"Playing with Fire" },
+            { img:"images/apple_of_my_eye.png", answer:"Apple of My Eye" },
+            { img:"images/think_outside_the_box.png", answer:"Think Outside the Box" },
+            { img:"images/knock_on_wood.png", answer:"Knock on Wood" },
+            { img:"images/world_without_end.png", answer:"World Without End" },
+            { img:"images/running_out_of_time.png", answer:"Running Out of Time" },
+            { img:"images/hotter_than_the_bed.png", answer:"Hotter Than the Bed" },
+            { img:"images/irrelevant.png", answer:"Irrelevant" },
+            { img:"images/cancel_the_plan.png", answer:"Cancel the Plan" },
+            { img:"images/a_quick_word.png", answer:"A Quick Word" },
+            { img:"images/think_twice.png", answer:"Think Twice" },
+            { img:"images/mismatch.png", answer:"Mismatch" },
+            { img:"images/twisted_reflection.png", answer:"Twisted Reflection" },
+            { img:"images/speechless.png", answer:"Speechless" }
+        ],
+        "Animals": [
+            { img: "images/bee.png", answer: "Bee" },
+            { img: "images/bird.png", answer: "Bird" },
+            { img: "images/monkey.png", answer: "Monkey" },
+            { img: "images/dog.png", answer: "Dog" },
+            { img: "images/cat.png", answer: "Cat" },
+            { img: "images/mice.png", answer: "Mice" },
+            { img: "images/pig.png", answer: "Pig" },
+            { img: "images/rabbit.png", answer: "Rabbit" },
+            { img: "images/king_cobra.png", answer: "King Cobra" },
+            { img: "images/cow.png", answer: "Cow" },
+            { img: "images/butterfly.png", answer: "Butterfly" },
+            { img: "images/electric_eel.png", answer: "Electric Eel" },
+            { img: "images/two_legs.png", answer: "Two Legs" },
+            { img: "images/four_legs.png", answer: "Four Legs" },
+            { img: "images/farm_animals.png", answer: "Farm Animals" },
+            { img: "images/panda_bear.png", answer: "Panda Bear" },
+            { img: "images/poisonous_snake.png", answer: "Poisonous Snakes" },
+            { img: "images/eagle.png", answer: "Eagle" },
+            { img: "images/love_birds.png", answer: "Love Birds" },
+            { img: "images/goat.png", answer: "Goat" },
+            { img: "images/mammals.png", answer: "Mammals" },
+            { img: "images/land_animals.png", answer: "Land Animals" },
+            { img: "images/reptiles.png", answer: "Reptiles" },
+            { img: "images/molluks.png", answer: "Mollusks" },
+            { img: "images/arthropods.png", answer: "Arthropods" },
+            { img: "images/insects.png", answer: "Insects" },
+            { img: "images/water_animals.png", answer: "Water Animals" },
+            { img: "images/dangerous_animals.png", answer: "Dangerous Animals" },
+            { img: "images/extinct_animals.png", answer: "Extinct Animals" },
+            { img: "images/dinosaur.png", answer: "Dinosaur" }
+        ],
+        "Sports": [
+            { img: "images/marathon.png", answer: "Marathon" },
+            { img: "images/soccer.png", answer: "Soccer" },
+            { img: "images/basketball.png", answer: "Basketball" },
+            { img: "images/tennis.png", answer: "Tennis" },
+            { img: "images/swimming.png", answer: "Swimming" },
+            { img: "images/boxing.png", answer: "Boxing" },
+            { img: "images/golf.png", answer: "Golf" },
+            { img: "images/ice_hockey.png", answer: "Ice Hockey" },
+            { img: "images/archery.png", answer: "Archery" },
+            { img: "images/rock_climbing.png", answer: "Rock Climbing" },
+
+            { img: "images/downhill_skiing.png", answer: "Downhill Skiing" },
+            { img: "images/fishing.png", answer: "Fishing" },
+            { img: "images/longboard_surfing.png", answer: "Longboard Surfing" },
+            { img: "images/100_meter_sprint.png", answer: "100 Meter Sprint" },
+            { img: "images/weightlifting.png", answer: "Weightlifting" },
+            { img: "images/road_cycling.png", answer: "Road Cycling" },
+            { img: "images/fencing.png", answer: "Fencing" },
+            { img: "images/water_volleyball.png", answer: "Water Volleyball" },
+            { img: "images/gymnastics.png", answer: "Gymnastics" },
+            { img: "images/hurdles.png", answer: "Hurdles" },
+
+            { img: "images/ice_curling.png", answer: "Ice Curling" },
+            { img: "images/track_relay.png", answer: "Track Relay" },
+            { img: "images/long_jump.png", answer: "Long Jump" },
+            { img: "images/equestrian_target.png", answer: "Equestrian Target" },
+            { img: "images/kickboxing.png", answer: "Kickboxing" },
+            { img: "images/karate.png", answer: "Karate" },
+            { img: "images/judo.png", answer: "Judo" },
+            { img: "images/sepak_takraw.png", answer: "Sepak Takraw" },
+            { img: "images/cricket.png", answer: "Cricket" },
+            { img: "images/sumo_wrestling.png", answer: "Sumo Wrestling" },
+        ],
+        "Food": [
+            { img:"images/movie_avengers.png", answer:"Avengers" },
+
         ]
+
     };
 
     const imagesArray = puzzleSets[category];
@@ -348,6 +509,10 @@ function initGame(){
     const hintText = document.getElementById("hintText");
     const answerPopup = document.getElementById("answerPopup");
     const scoreBox = document.getElementById("scoreBox");
+
+    const correctSound = new Audio("sounds/correct.mp3");
+    const wrongSound = new Audio("sounds/wrong.mp3");
+    const finishSound = new Audio("sounds/finishes.mp3");
 
     function showImage(index){
         if(index<0) index=0;
@@ -365,36 +530,39 @@ function initGame(){
     document.getElementById("correctBtn").addEventListener("click", () => {
         score++;
         scoreBox.textContent = "Score: " + score;
-        answerPopup.style.display = "flex";
-        answerPopup.textContent = `🎉 ✔ Correct!\nPoints: ${score}`;
+
         if(currentIndex === imagesArray.length -1){
+            // LAST PUZZLE
+            answerPopup.style.display = "flex";
+            answerPopup.textContent = `🎉 ✔ Correct!\nPoints: ${score}`;
+            triggerConfetti();
+            finishSound.play(); // FINISH sound
             setTimeout(()=>{
-                triggerConfetti();
-                setTimeout(()=>{
-                    answerPopup.style.display="none"; 
-                    showMediumPopup(); 
-                }, 1800);
-            }, 500);
+                answerPopup.style.display="none"; 
+                showMediumPopup(); 
+            }, 1800);
+        } else {
+            // NORMAL PUZZLE
+            answerPopup.style.display = "flex";
+            answerPopup.textContent = `🎉 ✔ Correct!\nPoints: ${score}`;
+            correctSound.play(); // normal correct sound
         }
     });
 
     document.getElementById("wrongBtn").addEventListener("click", () => {
         answerPopup.style.display = "flex";
-        answerPopup.textContent = `❌ ✖ Wrong! Try again.`;
+        answerPopup.textContent = `✖ Wrong! Try again.`;
+        wrongSound.play();
     });
 
     hintBtn.addEventListener("click",()=>{
         hintBtn.disabled=true;
-        answerPopup.style.display="flex";
+        answerPopup.style.display = "flex";
         answerPopup.textContent = `Answer: ${imagesArray[currentIndex].answer}`;
         if(currentIndex===imagesArray.length-1){
-            setTimeout(()=>{
-                triggerConfetti();
-                setTimeout(()=>{
-                    answerPopup.style.display="none"; 
-                    showMediumPopup();
-                }, 1800);
-            },500);
+            triggerConfetti();
+            finishSound.play(); // FINISH sound
+            setTimeout(()=>{ answerPopup.style.display="none"; showMediumPopup(); },1800);
         }
     });
 
