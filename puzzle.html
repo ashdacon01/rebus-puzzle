@@ -156,13 +156,31 @@ html, body {
 
 .ready-dialog button:hover { transform: scale(1.05); background: #3a4147; }
 
-#scoreBox { position: fixed; top: 16px; right: 20px; padding: 10px 14px; background: #1f2327; color: #fff; border-radius: 8px; border: 2px solid #00000080; font-size: 1.05rem; z-index: 6000; box-shadow: 0 4px 12px rgba(0,0,0,0.4); min-width: 96px; text-align: center; transition: transform 0.2s ease; }
-
 .correct-btn, .wrong-btn { padding: 8px 12px; border-radius: 8px; border: 2px solid #00000060; cursor: pointer; font-size: 0.95rem; }
 .correct-btn { background: #1f7a1f; color: white; }
 .correct-btn:hover { transform: scale(1.03); }
 .wrong-btn { background: #7a1f1f; color: white; }
 .wrong-btn:hover { transform: scale(1.03); }
+
+/* ==== FULLSCREEN BUTTON ==== */#fullscreenBtn {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 7000;
+    background: transparent;        /* fully transparent */
+    color: white;                   /* icon color */
+    border: none;                   /* remove border */
+    border-radius: 10px;
+    padding: 8px 14px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+#fullscreenBtn:hover {
+    background: rgba(255, 255, 255, 0.1); /* subtle hover effect */
+    transform: scale(1.05);
+}
 
 </style>
 </head>
@@ -183,20 +201,26 @@ html, body {
 <div class="puzzle-page">
 <div class="puzzle-wrapper">
 
-    <div id="scoreBox">Score: 0</div>
+    <!-- FULLSCREEN BUTTON -->
+    <button id="fullscreenBtn">⛶</button>
 
     <h1 id="puzzleTitle">Puzzle</h1>
 
-    <div class="puzzle-tile">
+    <div class="puzzle-tile" style="position:relative;">
         <img id="puzzleImage" src="" alt="Rebus Image">
         <div class="power-led"></div>
         <div class="tv-foot-left"></div>
         <div class="tv-foot-right"></div>
+
+        <!-- SCORE BOX (inside tile) -->
+        <div id="scoreBox" style="position:absolute; top:12px; right:12px; z-index:500; padding:6px 12px; font-size:1rem; border-radius:6px; border:2px solid #00000080; background:#1f2327; color:white;">
+            Score: 0
+        </div>
     </div>
 
     <div class="nav-buttons">
-        <button id="correctBtn" class="correct-btn">✔ Correct</button>
-        <button id="wrongBtn" class="wrong-btn">✖ Wrong</button>
+        <button id="correctBtn" class="correct-btn">✔Correct</button>
+        <button id="wrongBtn" class="wrong-btn">✖Wrong</button>
     </div>
 
     <div class="nav-buttons">
@@ -218,6 +242,16 @@ html, body {
 </div>
 
 <div id="answerPopup" class="medium-popup" style="display:none;"></div>
+
+
+<div id="playMorePopup" class="ready-popup" style="display:none;">
+    <div class="ready-dialog">
+        <p>Do you want to play more?</p>
+        <div style="display:flex; flex-direction:column; gap:15px;">
+            <button onclick="window.location.href='categories.html'">Category</button>
+            <button onclick="window.location.href='index.html'" style="background:#5a1f1f;">Quit</button>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -271,6 +305,26 @@ function transitionBack() {
     setTimeout(() => window.location.href="categories.html", 300);
 }
 
+// FULLSCREEN BUTTON LOGIC
+const fullscreenBtn = document.getElementById("fullscreenBtn");
+
+fullscreenBtn.addEventListener("click", () => {
+    if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+    } else {
+        document.exitFullscreen();
+    }
+});
+
+// Hide/show fullscreen button on fullscreen change
+document.addEventListener("fullscreenchange", () => {
+    if (document.fullscreenElement) {
+        fullscreenBtn.style.display = "none"; // hide button
+    } else {
+        fullscreenBtn.style.display = "block"; // show button
+    }
+});
+
 // CONFETTI
 function triggerConfetti() {
     const canvas = document.createElement("canvas");
@@ -287,22 +341,9 @@ function triggerConfetti() {
     setTimeout(()=>canvas.remove(),2500);
 }
 
-// MEDIUM POPUP
-function showMediumPopup() {
-    const pop = document.createElement("div");
-    pop.className = "medium-popup";
-    pop.innerHTML = `
-        <div style="text-align:center;">
-            <p style="font-size:3rem; margin-bottom:30px;">Want to play more?</p>
-            <div style="display:flex; justify-content:center; gap:20px;">
-                <button id="categoryBtn" style="padding:12px 24px; font-size:1.5rem; border-radius:8px;">Category</button>
-                <button id="quitBtn" style="padding:12px 24px; font-size:1.5rem; border-radius:8px;">Quit</button>
-            </div>
-        </div>
-    `;
-    document.body.appendChild(pop);
-    document.getElementById("categoryBtn").onclick = () => window.location.href = "categories.html";
-    document.getElementById("quitBtn").onclick = () => window.location.href = "index.html";
+// SHOW MEDIUM / PLAY MORE POPUP
+function showMediumPopup(){
+    document.getElementById("playMorePopup").style.display="flex";
 }
 
 // READY POPUP
@@ -359,32 +400,35 @@ function initGame(){
         puzzleImage.src = imagesArray[currentIndex].img;
         hintBtn.disabled=false;
         hintPressed=false;
-        nextBtn.disabled = true;      // disable Next until hint pressed
+        nextBtn.disabled = true;
     }
 
     nextBtn.addEventListener("click",()=>showImage(currentIndex+1));
     prevBtn.addEventListener("click",()=>showImage(currentIndex-1));
 
     correctBtn.addEventListener("click", () => {
-        score++;
-        scoreBox.textContent = "Score: " + score;
+    score++;
+    scoreBox.textContent = "Score: " + score;
 
-        if(currentIndex === imagesArray.length -1){
-            answerPopup.style.display = "flex";
-            answerPopup.textContent = `🎉 ✔ Correct!\nPoints: ${score}`;
-            triggerConfetti();
-            finishSound.play();
-            setTimeout(()=>{ answerPopup.style.display="none"; showMediumPopup(); }, 1800);
-        } else {
-            answerPopup.style.display = "flex";
-            answerPopup.textContent = `🎉 ✔ Correct!\nPoints: ${score}`;
-            correctSound.play();
-        }
-    });
+    nextBtn.disabled = false;
+    hintPressed = true;
+
+    if(currentIndex === imagesArray.length -1){
+        answerPopup.style.display = "flex";
+        answerPopup.textContent = `✔Correct!`; 
+        triggerConfetti();
+        finishSound.play();
+        setTimeout(()=>{ answerPopup.style.display="none"; showMediumPopup(); }, 1800);
+    } else {
+        answerPopup.style.display = "flex";
+        answerPopup.textContent = `✔Correct!`; 
+        correctSound.play();
+    }
+});
 
     wrongBtn.addEventListener("click", () => {
         answerPopup.style.display = "flex";
-        answerPopup.textContent = `✖ Wrong! Try again.`;
+        answerPopup.textContent = `✖ Wrong!\nTry again.`;
         wrongSound.play();
     });
 
@@ -399,7 +443,7 @@ function initGame(){
         if(currentIndex===imagesArray.length-1){
             triggerConfetti();
             finishSound.play();
-            setTimeout(()=>{ answerPopup.style.display="none"; showMediumPopup(); },1800);
+            setTimeout(()=>{ answerPopup.style.display="none"; showMediumPopup(); },5000);
         }
     });
 
@@ -408,3 +452,5 @@ function initGame(){
     showImage(0);
 }
 </script>
+</body>
+</html>

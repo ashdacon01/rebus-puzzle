@@ -28,8 +28,56 @@ const puzzleAnswers = {
 const normalize = str => str.replace(/\s+/g, ' ').trim().toLowerCase();
 
 // ------------------------
-// PUZZLE PAGE LOGIC
+// FULLSCREEN SETUP
 // ------------------------
+document.addEventListener("DOMContentLoaded", () => {
+    // Automatically request fullscreen if previously active
+    if (sessionStorage.getItem("fullscreenActive") === "true") {
+        if (document.documentElement.requestFullscreen) {
+            document.documentElement.requestFullscreen();
+        }
+    }
+
+    // Create fullscreen button
+    const fsBtn = document.createElement("button");
+    fsBtn.id = "fullscreenBtn";
+    fsBtn.textContent = "⛶";
+    fsBtn.style.position = "fixed";
+    fsBtn.style.top = "20px";
+    fsBtn.style.right = "20px";
+    fsBtn.style.zIndex = "9999";
+    fsBtn.style.padding = "10px";
+    fsBtn.style.fontSize = "1.5rem";
+    fsBtn.style.background = "#b40e0e";
+    fsBtn.style.border = "none";
+    fsBtn.style.borderRadius = "6px";
+    fsBtn.style.color = "white";
+    fsBtn.style.cursor = "pointer";
+    document.body.appendChild(fsBtn);
+
+    fsBtn.addEventListener("click", () => {
+        if (document.documentElement.requestFullscreen) {
+            document.documentElement.requestFullscreen();
+        }
+        sessionStorage.setItem("fullscreenActive", "true");
+    });
+
+    // Hide button when in fullscreen
+    document.addEventListener("fullscreenchange", toggleFsBtn);
+    document.addEventListener("webkitfullscreenchange", toggleFsBtn);
+    document.addEventListener("mozfullscreenchange", toggleFsBtn);
+    document.addEventListener("MSFullscreenChange", toggleFsBtn);
+
+    function toggleFsBtn() {
+        if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement) {
+            fsBtn.style.display = "none";
+        } else {
+            fsBtn.style.display = "block";
+            sessionStorage.setItem("fullscreenActive", "false");
+        }
+    }
+});
+
 // ------------------------
 // PUZZLE PAGE LOGIC
 // ------------------------
@@ -83,7 +131,6 @@ document.addEventListener("DOMContentLoaded", () => {
     // Show first image
     showImage(0);
 });
-
 
 // ------------------------
 // CATEGORY SELECTION NAVIGATION

@@ -23,10 +23,10 @@ body.show {
     width: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: space-between; /* FIXED */
+    justify-content: space-between;
     align-items: center;
     text-align: center;
-    padding: 40px 20px 20px 20px; /* FIXED */
+    padding: 40px 20px 20px 20px;
 }
 
 /* Title */
@@ -48,9 +48,9 @@ body.show {
 /* Tiles Grid */
 .topic-buttons {
     display: grid;
-    grid-template-columns: repeat(3, 280px); /* smaller than 350px */
-    grid-auto-rows: 180px; /* smaller than 230px */
-    gap: 30px 50px; /* slightly smaller gaps for balance */
+    grid-template-columns: repeat(3, 280px);
+    grid-auto-rows: 180px;
+    gap: 30px 50px;
     justify-content: center;
 }
 
@@ -68,7 +68,7 @@ body.show {
     justify-content: flex-end;
     align-items: center;
 
-    padding: 8px; /* slightly less padding */
+    padding: 8px;
     transition: 0.3s ease;
     color: white;
     position: relative;
@@ -77,15 +77,15 @@ body.show {
 /* Tile Images */
 .topic-buttons button img {
     width: 100%;
-    height: 120px; /* smaller than 160px */
+    height: 120px;
     object-fit: cover;
     border-radius: 10px;
-    margin-bottom: 10px; /* smaller spacing under image */
+    margin-bottom: 10px;
 }
 
 /* Tile Text */
 .topic-buttons button span {
-    font-size: 1.4rem; /* slightly smaller text */
+    font-size: 1.4rem;
 }
 
 /* Hover */
@@ -129,9 +129,33 @@ button.quit-btn {
 button.quit-btn:hover {
     background: #5c0000;
 }
+
+/* Fullscreen button styles */
+.fullscreen-btn {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: 1000;
+    padding: 8px 12px;
+    font-size: 20px;
+    cursor: pointer;
+    border: none;
+    background-color: #b40e0e;
+    color: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    transition: background-color 0.3s;
+}
+
+.fullscreen-btn:hover {
+    background-color: #940b0b;
+}
 </style>
 </head>
 <body>
+
+<!-- Fullscreen toggle button -->
+<button id="fullscreen-btn" class="fullscreen-btn">⛶</button>
 
 <div class="topics" id="topicSelection">
     <h1>Choose a Puzzle Topic</h1>
@@ -175,6 +199,13 @@ button.quit-btn:hover {
 document.addEventListener("DOMContentLoaded", () => {
     document.body.classList.add("show");
 
+    // Automatically go fullscreen if set on index.html
+    if (localStorage.getItem('fullscreenEnabled') === 'true' && !document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => {
+            console.warn("Fullscreen failed:", err);
+        });
+    }
+
     const categoryButtons = document.querySelectorAll('.category-btn');
     categoryButtons.forEach(button => {
         button.addEventListener('click', () => {
@@ -210,6 +241,30 @@ function quitGame() {
     document.getElementById("yesQuit").onclick = () => { window.location.href = "index.html"; };
     document.getElementById("noQuit").onclick = () => box.remove();
 }
+
+// Fullscreen toggle
+const fsBtn = document.getElementById('fullscreen-btn');
+
+fsBtn.addEventListener('click', () => {
+    if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => {
+            alert(`Error attempting to enable fullscreen: ${err.message}`);
+        });
+        localStorage.setItem('fullscreenEnabled', 'true');
+    } else {
+        document.exitFullscreen();
+        localStorage.removeItem('fullscreenEnabled');
+    }
+});
+
+// Hide fullscreen button when in fullscreen
+document.addEventListener('fullscreenchange', () => {
+    if (document.fullscreenElement) {
+        fsBtn.style.display = 'none';
+    } else {
+        fsBtn.style.display = 'block';
+    }
+});
 </script>
 
 </body>
