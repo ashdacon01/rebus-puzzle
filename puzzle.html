@@ -1,115 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rebus Puzzle - Slideshow</title>
-<link rel="stylesheet" href="style.css">
+<meta charset="UTF-8"> <!-- Set character encoding to UTF-8 -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Make page responsive on mobile -->
+<title>Rebus Puzzle - Slideshow</title> <!-- Page title -->
+<link rel="stylesheet" href="style.css"> <!-- Link external CSS file -->
 </head>
 <body>
 
+<!-- Canvas for particle effects / background animations -->
 <canvas id="particleCanvas"></canvas>
 
+<!-- Ready popup before starting the game -->
 <div id="readyPopup" class="ready-popup">
     <div class="ready-dialog">
         <p>Are you ready to play?</p>
         <div style="display:flex; flex-direction:column; gap:15px;">
-            <button id="startGameBtn">Start</button>
-            <button id="quitReadyBtn" style="background:#5a1f1f;">Quit</button>
+            <button id="startGameBtn">Start</button> <!-- Button to start the game -->
+            <button id="quitReadyBtn" style="background:#5a1f1f;">Quit</button> <!-- Button to quit to categories -->
         </div>
     </div>
 </div>
 
+<!-- Main puzzle page wrapper -->
 <div class="puzzle-page">
 <div class="puzzle-wrapper">
 
     <!-- FULLSCREEN BUTTON -->
-    <button id="fullscreenBtn">⛶</button>
+    <button id="fullscreenBtn">⛶</button> <!-- Button to toggle fullscreen mode -->
 
-    <h1 id="puzzleTitle">Puzzle</h1>
+    <h1 id="puzzleTitle">Puzzle</h1> <!-- Display current puzzle category/title -->
 
+    <!-- Puzzle image container -->
     <div class="puzzle-tile" style="position:relative;">
-        <img id="puzzleImage" src="" alt="Rebus Image">
-        <div class="power-led"></div>
-        <div class="tv-foot-left"></div>
-        <div class="tv-foot-right"></div>
+        <img id="puzzleImage" src="" alt="Rebus Image"> <!-- Placeholder for puzzle image -->
+        <div class="power-led"></div> <!-- Visual effect LED -->
+        <div class="tv-foot-left"></div> <!-- Visual decoration -->
+        <div class="tv-foot-right"></div> <!-- Visual decoration -->
 
         <!-- SCORE BOX -->
         <div id="scoreBox" style="position:absolute; top:12px; right:12px; z-index:500; padding:6px 12px; font-size:1rem; border-radius:6px; border:2px solid #00000080; background:#1f2327; color:white;">
-            Score: 0
+            Score: 0 <!-- Display current score -->
         </div>
     </div>
 
+    <!-- Correct/Wrong buttons -->
     <div class="nav-buttons">
         <button id="correctBtn" class="correct-btn">✔Correct</button>
         <button id="wrongBtn" class="wrong-btn">✖Wrong</button>
     </div>
 
+    <!-- Navigation buttons for next/previous image -->
     <div class="nav-buttons">
         <button id="prevImg" class="rounded-btn">⏮ Prev</button>
         <button id="nextImg" class="rounded-btn">Next ⏭</button>
     </div>
 
+    <!-- Hint button and container -->
     <button id="hintBtn" class="rounded-btn">Show Hint</button>
     <div class="hint-container">
-        <p id="hintText"></p>
+        <p id="hintText"></p> <!-- Display hint text -->
     </div>
 
+    <!-- Popup to show answer or feedback -->
     <div id="result"></div>
 
+    <!-- Bottom navigation buttons -->
     <div class="bottom-buttons">
-        <button class="back-btn" onclick="transitionBack()">Back</button>
-        <button class="quit-btn" onclick="quitGame()">Quit</button>
+        <button class="back-btn" onclick="transitionBack()">Back</button> <!-- Back to category -->
+        <button class="quit-btn" onclick="quitGame()">Quit</button> <!-- Quit game -->
     </div>
 </div>
 
+<!-- Popup for showing answer or hints -->
 <div id="answerPopup" class="medium-popup" style="display:none;"></div>
 
+<!-- Popup for play more / end game -->
 <div id="playMorePopup" class="ready-popup" style="display:none;">
     <div class="ready-dialog">
         <p>Do you want to play more?</p>
         <div style="display:flex; flex-direction:column; gap:15px;">
-            <button onclick="window.location.href='categories.html'">Category</button>
-            <button onclick="window.location.href='index.html'" style="background:#5a1f1f;">Quit</button>
+            <button onclick="window.location.href='categories.html'">Category</button> <!-- Go back to category selection -->
+            <button onclick="window.location.href='index.html'" style="background:#5a1f1f;">Quit</button> <!-- Quit to main menu -->
         </div>
     </div>
 </div>
 
+<!-- External JS -->
 <script src="script.js"></script>
 
 <script>
-// PARTICLES
-const canvas = document.getElementById("particleCanvas");
-const ctx = canvas.getContext("2d");
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-const particles = [];
+// ================= PARTICLE EFFECTS =================
+const canvas = document.getElementById("particleCanvas"); // Particle canvas element
+const ctx = canvas.getContext("2d"); // Canvas drawing context
+canvas.width = window.innerWidth; // Set canvas width
+canvas.height = window.innerHeight; // Set canvas height
+const particles = []; // Array to store particles
+
+// Initialize 120 particle objects
 for(let i=0;i<120;i++){
     particles.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, r: 1+Math.random()*3, d: Math.random()*1 });
 }
+
+// Function to draw and animate particles
 function drawParticles(){
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    ctx.fillStyle = "rgba(255,255,255,0.3)";
+    ctx.clearRect(0,0,canvas.width,canvas.height); // Clear canvas
+    ctx.fillStyle = "rgba(255,255,255,0.3)"; // Particle color
     particles.forEach(p=>{
         ctx.beginPath();
-        ctx.arc(p.x,p.y,p.r,0,Math.PI*2,true);
+        ctx.arc(p.x,p.y,p.r,0,Math.PI*2,true); // Draw circle
         ctx.fill();
-        p.y += 0.2 + p.d;
-        if(p.y > canvas.height) p.y = 0;
+        p.y += 0.2 + p.d; // Move particle down
+        if(p.y > canvas.height) p.y = 0; // Reset if below canvas
     });
-    requestAnimationFrame(drawParticles);
+    requestAnimationFrame(drawParticles); // Loop animation
 }
-drawParticles();
+drawParticles(); // Start particle animation
 
-// GET QUERY PARAM
+// ================= GET QUERY PARAM =================
 function getQueryParam(param) {
-    return new URLSearchParams(window.location.search).get(param);
+    return new URLSearchParams(window.location.search).get(param); // Retrieve URL query parameter
 }
 
-// QUIT / BACK
+// ================= QUIT / BACK =================
 function quitGame() {
-    if(document.querySelector(".quit-popup")) return;
-    const box = document.createElement("div");
+    if(document.querySelector(".quit-popup")) return; // Prevent multiple popups
+    const box = document.createElement("div"); // Create popup container
     box.className = "quit-popup";
     box.innerHTML = `<div class="quit-dialog">
         <p>Are you sure you want to quit?</p>
@@ -118,49 +134,49 @@ function quitGame() {
             <button id="noQuit">No</button>
         </div>
     </div>`;
-    document.body.appendChild(box);
-    document.getElementById("yesQuit").onclick = () => { window.location.href="categories.html"; };
-    document.getElementById("noQuit").onclick = () => box.remove();
+    document.body.appendChild(box); // Add to DOM
+    document.getElementById("yesQuit").onclick = () => { window.location.href="categories.html"; }; // Yes handler
+    document.getElementById("noQuit").onclick = () => box.remove(); // No handler
 }
 
 function transitionBack() {
-    window.location.href="categories.html";
+    window.location.href="categories.html"; // Navigate back to categories
 }
 
-// READY POPUP
+// ================= READY POPUP =================
 document.addEventListener("DOMContentLoaded",()=>{
-    const readyPopup = document.getElementById("readyPopup");
-    const startBtn = document.getElementById("startGameBtn");
-    const quitReadyBtn = document.getElementById("quitReadyBtn");
-    const puzzlePage = document.querySelector(".puzzle-page");
+    const readyPopup = document.getElementById("readyPopup"); // Ready popup element
+    const startBtn = document.getElementById("startGameBtn"); // Start button
+    const quitReadyBtn = document.getElementById("quitReadyBtn"); // Quit button
+    const puzzlePage = document.querySelector(".puzzle-page"); // Puzzle page container
 
     startBtn.addEventListener("click",()=>{
-        readyPopup.style.display = "none";
-        puzzlePage.classList.add("show");
-        initGame();
+        readyPopup.style.display = "none"; // Hide ready popup
+        puzzlePage.classList.add("show"); // Show puzzle page
+        initGame(); // Initialize game logic
     });
 
-    quitReadyBtn.addEventListener("click", ()=>{ window.location.href = "categories.html"; });
+    quitReadyBtn.addEventListener("click", ()=>{ window.location.href = "categories.html"; }); // Quit handler
 });
 
-// FULLSCREEN BUTTON LOGIC
-const fsBtn = document.getElementById("fullscreenBtn");
+// ================= FULLSCREEN BUTTON LOGIC =================
+const fsBtn = document.getElementById("fullscreenBtn"); // Fullscreen button
 fsBtn.addEventListener("click", () => {
-    if (!document.fullscreenElement) {
+    if (!document.fullscreenElement) { // Enter fullscreen
         document.documentElement.requestFullscreen().catch(err=>console.warn(err));
-    } else {
+    } else { // Exit fullscreen
         document.exitFullscreen();
     }
 });
 
-// Hide fullscreen button when in fullscreen
+// Hide fullscreen button when in fullscreen mode
 document.addEventListener("fullscreenchange", () => {
     fsBtn.style.display = document.fullscreenElement ? "none" : "block";
 });
 
-// CONFETTI FUNCTION
+// ================= CONFETTI =================
 function triggerConfetti(){
-    const canvas = document.createElement("canvas");
+    const canvas = document.createElement("canvas"); // Create confetti canvas
     canvas.id = "confettiCanvas";
     canvas.style.position="absolute";
     canvas.style.top=0; canvas.style.left=0;
@@ -170,31 +186,36 @@ function triggerConfetti(){
     document.body.appendChild(canvas);
     const ctx = canvas.getContext("2d");
     const pieces=[];
+
+    // Generate 150 confetti pieces
     for(let i=0;i<150;i++){ 
         pieces.push({ x: Math.random()*canvas.clientWidth, y: Math.random()*-50, size:5+Math.random()*8, speed:2+Math.random()*4 });
     }
+
     function update(){
         ctx.clearRect(0,0,canvas.width,canvas.height);
         pieces.forEach(p=>{
-            p.y+=p.speed;
-            ctx.fillStyle=`hsl(${Math.random()*360},100%,50%)`;
-            ctx.fillRect(p.x,p.y,p.size,p.size);
+            p.y+=p.speed; // Move confetti down
+            ctx.fillStyle=`hsl(${Math.random()*360},100%,50%)`; // Random color
+            ctx.fillRect(p.x,p.y,p.size,p.size); // Draw confetti piece
         });
-        requestAnimationFrame(update);
+        requestAnimationFrame(update); // Loop animation
     }
+
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    update();
-    setTimeout(()=>canvas.remove(),2500);
+    update(); // Start animation
+    setTimeout(()=>canvas.remove(),2500); // Remove after 2.5 seconds
 }
 
-// INIT GAME
+// ================= INIT GAME =================
 function initGame(){
-    const category = getQueryParam("category") || "Brand Logos";
-    document.getElementById("puzzleTitle").textContent = category;
+    const category = getQueryParam("category") || "Brand Logos"; // Get category from URL
+    document.getElementById("puzzleTitle").textContent = category; // Update title
 
+    // Puzzle data sets
     const puzzleSets = {
-        "Brand Logos": [
+                "Brand Logos": [
             { img:"images/brand_apple.png", answer:"Apple", hint:"A fruit and a tech company" },
             { img:"images/brand_disneyland.png", answer:"Disneyland", hint:"A famous theme park" },
             { img:"images/brand_fedex.png", answer:"FedEx", hint:"Famous delivery service" },
@@ -377,14 +398,14 @@ function initGame(){
             { img:"images/rice.png", answer:"Rice", hint:"Common grain staple" },
             { img:"images/fortune_cookie.png", answer:"Fortune Cookie", hint:"Sweet cookie with a message" },
             { img:"images/hawaiian_pizza.png", answer:"Hawaiian Pizza", hint:"Topped with ham and pineapple" }
-]
-
+        ]
     };
 
-    const imagesArray = puzzleSets[category];
-    let currentIndex = 0;
-    let score = 0;
+    const imagesArray = puzzleSets[category]; // Get puzzles for category
+    let currentIndex = 0; // Current puzzle index
+    let score = 0; // Player score
 
+    // Elements for game interaction
     const puzzleImage = document.getElementById("puzzleImage");
     const hintBtn = document.getElementById("hintBtn");
     const answerPopup = document.getElementById("answerPopup");
@@ -395,10 +416,12 @@ function initGame(){
     const correctBtn = document.getElementById("correctBtn");
     const wrongBtn = document.getElementById("wrongBtn");
 
+    // Audio feedback
     const correctSound = new Audio("sounds/correct.mp3");
     const wrongSound = new Audio("sounds/wrong.mp3");
     const finishSound = new Audio("sounds/finishes.mp3");
 
+    // Show a puzzle image based on index
     function showImage(index){
         if(index<0) index=0;
         if(index>=imagesArray.length) index=imagesArray.length-1;
@@ -408,79 +431,57 @@ function initGame(){
         nextBtn.disabled = true;
     }
 
-    nextBtn.addEventListener("click",()=>showImage(currentIndex+1));
-    prevBtn.addEventListener("click",()=>showImage(currentIndex-1));
+    nextBtn.addEventListener("click",()=>showImage(currentIndex+1)); // Next puzzle
+    prevBtn.addEventListener("click",()=>showImage(currentIndex-1)); // Previous puzzle
 
-
-
-
-    // Function to update score display
+    // Update score display
     function updateScoreDisplay() {
         scoreBox.textContent = `${score}/${currentIndex + 1}`;
     }
 
-    // Correct button
+    // Correct button click
     correctBtn.addEventListener("click", () => {
-        score++; // increment correct guesses
-        updateScoreDisplay();
-        nextBtn.disabled = false; // enable next
-
+        score++; // Increment score
+        updateScoreDisplay(); // Update display
+        nextBtn.disabled = false; // Enable next
         answerPopup.style.display = "flex";
         answerPopup.textContent = `Correct! Answer: ${imagesArray[currentIndex].answer}`;
         correctSound.play();
 
         if(currentIndex === imagesArray.length - 1){
-            triggerConfetti();
+            triggerConfetti(); // Celebrate
             finishSound.play();
-
-            // Show final score first
             answerPopup.style.display = "flex";
             answerPopup.textContent = `Final Score:\n${score}/${imagesArray.length}`;
-
-            // After 15 seconds, hide final score and show play more popup
             setTimeout(()=>{ 
                 answerPopup.style.display = "none"; 
                 document.getElementById("playMorePopup").style.display="flex"; 
-            }, 15000); // 15000ms = 15 seconds
-}
-
+            }, 15000); // Show final score for 15 sec
+        }
     });
 
-    // Wrong button
+    // Wrong button click
     wrongBtn.addEventListener("click", () => {
-        nextBtn.disabled = false; // enable next even if wrong
-        updateScoreDisplay(); // show current correct / images seen
+        nextBtn.disabled = false; // Enable next
+        updateScoreDisplay(); // Update score
         answerPopup.style.display = "flex";
         answerPopup.textContent = `✖ Wrong!\nTry again.`;
         wrongSound.play();
     });
 
-
-
-
-
-
-
-    wrongBtn.addEventListener("click", () => {
-        answerPopup.style.display = "flex";
-        answerPopup.textContent = `✖ Wrong!\nTry again.`;
-        wrongSound.play();
-    });
-
+    // Hint button
     hintBtn.addEventListener("click", () => {
-        hintBtn.disabled = true;
-        nextBtn.disabled = false;
-
-        // Show hint instead of answer
-        const hintText = imagesArray[currentIndex].hint || "No hint available";
+        hintBtn.disabled = true; // Disable hint button
+        nextBtn.disabled = false; // Enable next
+        const hintText = imagesArray[currentIndex].hint || "No hint available"; // Get hint
         answerPopup.style.display = "flex";
-        answerPopup.textContent = `Hint: ${hintText}`;
-});
+        answerPopup.textContent = `Hint: ${hintText}`; // Show hint
+    });
 
-
+    // Hide answer popup on click
     answerPopup.addEventListener("click",()=>{ answerPopup.style.display="none"; });
 
-    showImage(0);
+    showImage(0); // Show first image
 }
 </script>
 

@@ -1,224 +1,225 @@
-
 /* ---------- Global Styles ---------- */
-html, body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    min-height: 100%;
-    height: 100%;
-    overflow-x: hidden;
-    font-family: 'Tempus Sans ITC', cursive;
-    background: linear-gradient(135deg, #b40e0e, #ff4d4d);
-    animation: gradientShift 15s ease-in-out infinite;
-    position: relative;
+html, body { /* Target html and body for global layout and style */
+    margin: 0; /* Remove default margin */
+    padding: 0; /* Remove default padding */
+    width: 100%; /* Full width of viewport */
+    min-height: 100%; /* Minimum height is full viewport */
+    height: 100%; /* Full height */
+    overflow-x: hidden; /* Prevent horizontal scroll */
+    font-family: 'Tempus Sans ITC', cursive; /* Set font */
+    background: linear-gradient(135deg, #b40e0e, #ff4d4d); /* Gradient background */
+    animation: gradientShift 15s ease-in-out infinite; /* Animate gradient */
+    position: relative; /* Position context for children */
 
     /* FIX ADDED */
-    display: flex;
-    flex-direction: column;
-    justify-content: stretch;
+    display: flex; /* Flex container */
+    flex-direction: column; /* Vertical stacking */
+    justify-content: stretch; /* Stretch children */
 }
 
-@keyframes gradientShift {
-    0% { background: linear-gradient(135deg, #b40e0e, #ff4d4d); }
-    50% { background: linear-gradient(135deg, #ff1f1f, #ff8080); }
-    100% { background: linear-gradient(135deg, #b40e0e, #ff4d4d); }
+@keyframes gradientShift { /* Keyframes for gradient animation */
+    0% { background: linear-gradient(135deg, #b40e0e, #ff4d4d); } /* Start gradient */
+    50% { background: linear-gradient(135deg, #ff1f1f, #ff8080); } /* Mid gradient */
+    100% { background: linear-gradient(135deg, #b40e0e, #ff4d4d); } /* End gradient */
 }
 
 /* Center ONLY the welcome page */
-#welcome {
-    height: 100%;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+#welcome { /* Welcome container styles */
+    height: 100%; /* Full height */
+    width: 100%; /* Full width */
+    display: flex; /* Flex container */
+    flex-direction: column; /* Stack vertically */
+    justify-content: center; /* Center vertically */
+    align-items: center; /* Center horizontally */
 }
 
-.slide {
-    text-align: center;
+.slide { /* Slide styling */
+    text-align: center; /* Center text */
 }
 
-img.welcome-img {
-    width: 600px;
-    margin-bottom: 50px;
+img.welcome-img { /* Welcome image */
+    width: 600px; /* Fixed width */
+    margin-bottom: 50px; /* Spacing below image */
 }
 
-p, button {
-    color: white;
-    font-size: 1.5rem;
+p, button { /* Text and buttons */
+    color: white; /* White text */
+    font-size: 1.5rem; /* Font size */
 }
 
-button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 8px;
-    background: #1f2327;
-    cursor: pointer;
-    margin-top: 20px;
-    transition: background 0.3s ease;
+button { /* General button style */
+    padding: 10px 20px; /* Inner padding */
+    border: none; /* Remove default border */
+    border-radius: 8px; /* Rounded corners */
+    background: #1f2327; /* Dark background */
+    cursor: pointer; /* Pointer on hover */
+    margin-top: 20px; /* Top margin */
+    transition: background 0.3s ease; /* Smooth hover */
 }
 
-button:hover {
-    background: #071d36;
+button:hover { /* Hover effect */
+    background: #071d36; /* Darker background */
 }
 
 /* ---------- Quit Confirmation Popup ---------- */
-.quit-popup {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.7);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 999;
+.quit-popup { /* Overlay for quit confirmation */
+    position: fixed; /* Fixed overlay */
+    top: 0; /* Top edge */
+    left: 0; /* Left edge */
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    background: rgba(0,0,0,0.7); /* Semi-transparent background */
+    display: flex; /* Flex container */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    z-index: 999; /* On top */
 }
 
-.quit-dialog {
-    background: #1f2327;
-    padding: 20px 30px;
-    border-radius: 12px;
-    text-align: center;
-    color: white;
-    font-size: 1.3rem;
+.quit-dialog { /* Popup box */
+    background: #1f2327; /* Dark background */
+    padding: 20px 30px; /* Inner padding */
+    border-radius: 12px; /* Rounded corners */
+    text-align: center; /* Center text */
+    color: white; /* White text */
+    font-size: 1.3rem; /* Medium font */
 }
 
-.quit-dialog button {
-    margin: 10px;
-    padding: 10px 20px;
-    background: #b40e0e;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    color: white;
-    font-size: 1rem;
+.quit-dialog button { /* Popup buttons */
+    margin: 10px; /* Spacing */
+    padding: 10px 20px; /* Inner padding */
+    background: #b40e0e; /* Red background */
+    border: none; /* Remove border */
+    border-radius: 8px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor */
+    color: white; /* White text */
+    font-size: 1rem; /* Font size */
 }
 
-.quit-dialog button:hover {
-    background: #7a0000;
+.quit-dialog button:hover { /* Hover effect */
+    background: #7a0000; /* Darker red */
 }
 
 /* ==== PUZZLE PAGE STYLES ==== */
-#particleCanvas {
-    position: fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    z-index: 0;
-    pointer-events: none;
+#particleCanvas { /* Particle background canvas */
+    position: fixed; /* Fixed position */
+    top:0; /* Top edge */
+    left:0; /* Left edge */
+    width:100%; /* Full width */
+    height:100%; /* Full height */
+    z-index: 0; /* Behind other elements */
+    pointer-events: none; /* Clicks pass through */
 }
 
-.puzzle-page { 
-    opacity: 0; 
-    transition: opacity 0.3s ease-in-out; 
-    margin: 0; 
-    height: 100vh; 
-    position: relative; 
-    z-index: 1; 
+.puzzle-page { /* Puzzle container */
+    opacity: 0; /* Initially hidden */
+    transition: opacity 0.3s ease-in-out; /* Fade in */
+    margin: 0; /* No margin */
+    height: 100vh; /* Full viewport height */
+    position: relative; /* Relative positioning */
+    z-index: 1; /* Above canvas */
 }
 
-.puzzle-page.show { opacity: 1; }
+.puzzle-page.show { opacity: 1; } /* Show page */
 
-.puzzle-page .puzzle-wrapper { 
-    display: flex; 
-    flex-direction: column; 
-    align-items: center; 
-    height: auto; 
-    padding: 20px; 
-    box-sizing: border-box; 
+.puzzle-page .puzzle-wrapper { /* Inner wrapper */
+    display: flex; /* Flex layout */
+    flex-direction: column; /* Vertical stack */
+    align-items: center; /* Center horizontally */
+    height: auto; /* Automatic height */
+    padding: 20px; /* Inner spacing */
+    box-sizing: border-box; /* Include padding in size */
 }
 
 /* ==== TV TILE DESIGN ==== */
-.puzzle-page .puzzle-tile {
-    width: 580px; 
-    height: 380px; 
-    background: #111; 
-    border-radius: 20px; 
-    border: 8px solid #333;
-    box-shadow: 0 0 30px rgba(0,0,0,0.7), inset 0 0 30px rgba(255,255,255,0.05);
-    position: relative;
-    overflow: visible;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+.puzzle-page .puzzle-tile { /* Tile container */
+    width: 580px; /* Width */
+    height: 380px; /* Height */
+    background: #111; /* Dark background */
+    border-radius: 20px; /* Rounded corners */
+    border: 8px solid #333; /* Border */
+    box-shadow: 0 0 30px rgba(0,0,0,0.7), inset 0 0 30px rgba(255,255,255,0.05); /* Glow effect */
+    position: relative; /* For children */
+    overflow: visible; /* Allow overflow */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Hover animation */
 }
 
-.puzzle-page .puzzle-tile:hover {
-    transform: scale(1.02);
-    box-shadow: 0 0 50px rgba(255, 255, 255, 0.6), inset 0 0 40px rgba(255,255,255,0.08);
+.puzzle-page .puzzle-tile:hover { /* Hover effect */
+    transform: scale(1.02); /* Slight enlarge */
+    box-shadow: 0 0 50px rgba(255, 255, 255, 0.6), inset 0 0 40px rgba(255,255,255,0.08); /* Glow */
 }
 
-.puzzle-page .puzzle-tile img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    padding: 0; 
-    margin: 0;
-    border-radius: 12px;
+.puzzle-page .puzzle-tile img { /* Image inside tile */
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    object-fit: cover; /* Cover entire tile */
+    padding: 0; /* Remove padding */
+    margin: 0; /* Remove margin */
+    border-radius: 12px; /* Rounded corners */
 }
 
-.puzzle-page .puzzle-tile::before {
-    content: "";
-    position: absolute;
-    top: 10%;
-    left: 10%;
-    width: 80%;
-    height: 80%;
-    border-radius: 12px;
-    background: linear-gradient(145deg, rgba(255,255,255,0.1), rgba(255,255,255,0));
-    pointer-events: none;
+.puzzle-page .puzzle-tile::before { /* Overlay shine */
+    content: ""; /* Required for pseudo-element */
+    position: absolute; /* Absolute inside tile */
+    top: 10%; /* 10% from top */
+    left: 10%; /* 10% from left */
+    width: 80%; /* Width */
+    height: 80%; /* Height */
+    border-radius: 12px; /* Rounded */
+    background: linear-gradient(145deg, rgba(255,255,255,0.1), rgba(255,255,255,0)); /* Gradient overlay */
+    pointer-events: none; /* Don't block clicks */
 }
 
-.puzzle-page .puzzle-tile::after {
-    content: "";
-    position: absolute;
-    bottom: -20px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100px;
-    height: 20px;
-    background: #222;
-    border-radius: 6px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+.puzzle-page .puzzle-tile::after { /* Tile shadow / stand */
+    content: ""; /* Pseudo-element content */
+    position: absolute; 
+    bottom: -20px; /* Below tile */
+    left: 50%; /* Center horizontally */
+    transform: translateX(-50%); /* Adjust center */
+    width: 100px; /* Shadow width */
+    height: 20px; /* Shadow height */
+    background: #222; /* Dark color */
+    border-radius: 6px; /* Rounded corners */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5); /* Shadow */
 }
 
+/* TV feet */
 .puzzle-page .puzzle-tile .tv-foot-left,
-.puzzle-page .puzzle-tile .tv-foot-right {
-    position: absolute;
+.puzzle-page .puzzle-tile .tv-foot-right { /* TV stand feet */
+    position: absolute; 
     bottom: -35px; 
-    width: 25px;
-    height: 15px;
-    background: #333;
-    border-radius: 3px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.5);
-    transform: rotate(-2deg);
+    width: 25px; 
+    height: 15px; 
+    background: #333; 
+    border-radius: 3px; 
+    box-shadow: 0 4px 8px rgba(0,0,0,0.5); 
+    transform: rotate(-2deg); 
 }
 
-.puzzle-page .puzzle-tile .tv-foot-right {
-    right: 25%;
-    transform: rotate(2deg);
+.puzzle-page .puzzle-tile .tv-foot-right { /* Right foot adjustment */
+    right: 25%; 
+    transform: rotate(2deg); 
 }
 
-.puzzle-page .puzzle-tile .tv-foot-left {
-    left: 25%;
+.puzzle-page .puzzle-tile .tv-foot-left { /* Left foot adjustment */
+    left: 25%; 
 }
 
-.puzzle-page .puzzle-tile .power-led {
-    position: absolute;
-    bottom: 12px;
-    right: 16px;
-    width: 10px;
-    height: 10px;
-    background: #0f0;
-    border-radius: 50%;
-    box-shadow: 0 0 8px #0f0, 0 0 12px #0f0;
-    animation: ledPulse 1.5s infinite alternate;
+/* Power LED light */
+.puzzle-page .puzzle-tile .power-led { 
+    position: absolute; 
+    bottom: 12px; 
+    right: 16px; 
+    width: 10px; 
+    height: 10px; 
+    background: #0f0; 
+    border-radius: 50%; 
+    box-shadow: 0 0 8px #0f0, 0 0 12px #0f0; 
+    animation: ledPulse 1.5s infinite alternate; 
 }
 
-@keyframes ledPulse {
-    0% { transform: scale(1); opacity: 0.8; }
-    100% { transform: scale(1.4); opacity: 1; }
+@keyframes ledPulse { 
+    0% { transform: scale(1); opacity: 0.8; } /* Small glow */
+    100% { transform: scale(1.4); opacity: 1; } /* Bigger glow */
 }
 
 /* BUTTONS, nav, popup, etc. */

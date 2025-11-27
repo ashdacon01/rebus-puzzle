@@ -1,69 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rebus Puzzle Game - Welcome</title>
-<link rel="stylesheet" href="style.css">
+<meta charset="UTF-8"> <!-- Sets the character encoding to UTF-8 -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Ensures responsive scaling on mobile devices -->
+<title>Rebus Puzzle Game - Welcome</title> <!-- Title of the webpage -->
+<link rel="stylesheet" href="style.css"> <!-- Link to external CSS file for styling -->
 
 <style>
 /* Fullscreen button styles */
-.fullscreen-btn {
-    position: fixed;
-    top: 10px;
-    right: 10px;
-    z-index: 1000;
-    padding: 8px 12px;
-    font-size: 20px; /* icon size */
-    cursor: pointer;
-    border: none;
-    background-color: #b40e0e; /* blends with background */
-    color: white;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-    transition: background-color 0.3s, opacity 0.3s;
+.fullscreen-btn { 
+    position: fixed; /* Keep button fixed on screen */
+    top: 10px; /* Distance from top */
+    right: 10px; /* Distance from right */
+    z-index: 1000; /* Ensure button is on top of other elements */
+    padding: 8px 12px; /* Button padding */
+    font-size: 20px; /* Icon size */
+    cursor: pointer; /* Show pointer on hover */
+    border: none; /* Remove default button border */
+    background-color: #b40e0e; /* Button background color */
+    color: white; /* Button text color */
+    border-radius: 5px; /* Rounded corners */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3); /* Add shadow for 3D effect */
+    transition: background-color 0.3s, opacity 0.3s; /* Smooth transition for hover effects */
 }
 
 .fullscreen-btn:hover {
-    background-color: #8f0b0b; /* slightly darker on hover */
+    background-color: #8f0b0b; /* Darker red when hovering */
 }
 </style>
 </head>
 <body>
-    <div class="slide" id="welcome">
-        <img src="images/welcome.png" class="welcome-img" alt="Welcome Image">
-        <p>Get ready to test your brain with fun puzzles!</p>
+    <div class="slide" id="welcome"> <!-- Main welcome slide container -->
+        <img src="images/welcome.png" class="welcome-img" alt="Welcome Image"> <!-- Welcome image -->
+        <p>Get ready to test your brain with fun puzzles!</p> <!-- Welcome text -->
 
-        <div class="bottom-buttons">
-            <button class="start-btn" onclick="window.location.href='categories.html'">Start Game</button>
-            <button class="quit-btn" onclick="quitGame()">Quit</button>
+        <div class="bottom-buttons"> <!-- Container for Start/Quit buttons -->
+            <button class="start-btn" onclick="window.location.href='categories.html'">Start Game</button> <!-- Start game button, redirects to categories page -->
+            <button class="quit-btn" onclick="quitGame()">Quit</button> <!-- Quit game button, calls quitGame() function -->
         </div>
     </div>
 
     <!-- Fullscreen toggle button -->
-    <button id="fullscreen-btn" class="fullscreen-btn">⛶</button>
+    <button id="fullscreen-btn" class="fullscreen-btn">⛶</button> <!-- Button to toggle fullscreen -->
 
 <script>
-function quitGame() {
-    if (confirm("Are you sure you want to quit?")) {
-        window.close();
-        setTimeout(() => window.location.href = "about:blank", 100);
+function quitGame() { 
+    // Function to quit the game
+    if (confirm("Are you sure you want to quit?")) { // Confirm with user
+        window.close(); // Attempt to close window
+        setTimeout(() => window.location.href = "about:blank", 100); // Fallback redirect if close fails
     }
 }
 
-// Fullscreen toggle
-const fsBtn = document.getElementById('fullscreen-btn');
+// Fullscreen toggle functionality
+const fsBtn = document.getElementById('fullscreen-btn'); // Get reference to fullscreen button
 
-fsBtn.addEventListener('click', () => {
-    if (!document.fullscreenElement) {
+fsBtn.addEventListener('click', () => { 
+    // Event listener for button click
+    if (!document.fullscreenElement) { // If not already fullscreen
         document.documentElement.requestFullscreen().then(() => {
-            // Save fullscreen state so other pages can detect
+            // Save fullscreen state in local storage
             localStorage.setItem('fullscreenEnabled', 'true');
         }).catch(err => {
-            alert(`Error attempting to enable fullscreen: ${err.message}`);
+            alert(`Error attempting to enable fullscreen: ${err.message}`); // Handle errors
         });
     } else {
-        document.exitFullscreen();
+        document.exitFullscreen(); // Exit fullscreen if already enabled
     }
 });
 
@@ -73,8 +75,7 @@ document.addEventListener('fullscreenchange', () => {
         fsBtn.style.display = 'none'; // Hide button in fullscreen
     } else {
         fsBtn.style.display = 'block'; // Show button when exiting fullscreen
-        // Clear the flag if user presses ESC
-        localStorage.removeItem('fullscreenEnabled');
+        localStorage.removeItem('fullscreenEnabled'); // Remove fullscreen flag if user presses ESC
     }
 });
 </script>
