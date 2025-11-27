@@ -5,184 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Rebus Puzzle - Slideshow</title>
 <link rel="stylesheet" href="style.css">
-
-<style>
-/* ==== UPDATED BACKGROUND & TILE GLOW + PARTICLES ==== */
-html, body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    min-height: 100%;
-    overflow-x: hidden;
-    background: linear-gradient(135deg, #b40e0e, #ff4d4d);
-    animation: gradientShift 15s ease-in-out infinite;
-    position: relative;
-}
-
-@keyframes gradientShift {
-    0% { background: linear-gradient(135deg, #b40e0e, #ff4d4d); }
-    50% { background: linear-gradient(135deg, #ff1f1f, #ff8080); }
-    100% { background: linear-gradient(135deg, #b40e0e, #ff4d4d); }
-}
-
-#particleCanvas {
-    position: fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    z-index: 0;
-    pointer-events: none;
-}
-
-.puzzle-page { opacity: 0; transition: opacity 0.3s ease-in-out; margin: 0; height: 100vh; position: relative; z-index: 1; }
-.puzzle-page.show { opacity: 1; }
-.puzzle-page .puzzle-wrapper { display: flex; flex-direction: column; align-items: center; height: auto; padding: 20px; box-sizing: border-box; }
-
-/* ==== TV TILE DESIGN ==== */
-.puzzle-page .puzzle-tile {
-    width: 580px; 
-    height: 380px; 
-    background: #111; 
-    border-radius: 20px; 
-    border: 8px solid #333;
-    box-shadow: 0 0 30px rgba(0,0,0,0.7), inset 0 0 30px rgba(255,255,255,0.05);
-    position: relative;
-    overflow: visible; /* allow feet to show */
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-.puzzle-page .puzzle-tile:hover {
-    transform: scale(1.02);
-    box-shadow: 0 0 50px rgba(255, 255, 255, 0.6), inset 0 0 40px rgba(255,255,255,0.08);
-}
-
-/* SCREEN IMAGE */
-.puzzle-page .puzzle-tile img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    padding: 0; 
-    margin: 0;
-    border-radius: 12px;
-}
-
-/* GLARE ON TV */
-.puzzle-page .puzzle-tile::before {
-    content: "";
-    position: absolute;
-    top: 10%;
-    left: 10%;
-    width: 80%;
-    height: 80%;
-    border-radius: 12px;
-    background: linear-gradient(145deg, rgba(255,255,255,0.1), rgba(255,255,255,0));
-    pointer-events: none;
-}
-
-/* TV STAND */
-.puzzle-page .puzzle-tile::after {
-    content: "";
-    position: absolute;
-    bottom: -20px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100px;
-    height: 20px;
-    background: #222;
-    border-radius: 6px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-}
-
-/* RETRO TV FEET */
-.puzzle-page .puzzle-tile .tv-foot-left,
-.puzzle-page .puzzle-tile .tv-foot-right {
-    position: absolute;
-    bottom: -35px; 
-    width: 25px;
-    height: 15px;
-    background: #333;
-    border-radius: 3px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.5);
-    transform: rotate(-2deg);
-}
-.puzzle-page .puzzle-tile .tv-foot-right {
-    right: 25%;
-    transform: rotate(2deg);
-}
-.puzzle-page .puzzle-tile .tv-foot-left {
-    left: 25%;
-}
-
-/* POWER LED */
-.puzzle-page .puzzle-tile .power-led {
-    position: absolute;
-    bottom: 12px;
-    right: 16px;
-    width: 10px;
-    height: 10px;
-    background: #0f0;
-    border-radius: 50%;
-    box-shadow: 0 0 8px #0f0, 0 0 12px #0f0;
-    animation: ledPulse 1.5s infinite alternate;
-}
-
-@keyframes ledPulse {
-    0% { transform: scale(1); opacity: 0.8; }
-    100% { transform: scale(1.4); opacity: 1; }
-}
-
-/* BUTTONS, nav, popup, etc. remain unchanged */
-.puzzle-page .rounded-btn { background: #1f2327; color: white; border: 2px solid #00000080; padding: 8px 16px; border-radius: 10px; cursor: pointer; font-size: inherit; transition: 0.2s ease; }
-.puzzle-page .rounded-btn:hover { background: #2b3238; transform: scale(1.05); }
-.puzzle-page .nav-buttons { display: flex; gap: 12px; margin-top: 8px; margin-bottom: 5px; position: relative; z-index: 10; flex-wrap: wrap; justify-content: center; }
-.puzzle-page #hintText { margin: 2px 0; min-height: 30px; display: flex; justify-content: center; align-items: center; }
-.puzzle-page #hintBtn { margin-top: 12px; }
-.puzzle-page .hint-container { height: 35px; display: flex; justify-content: center; align-items: center; margin-top: 5px; }
-.puzzle-page #result { font-size: 1.4rem; min-height: 1.2em; text-align: center; }
-.puzzle-page .bottom-buttons { position: fixed; bottom: 20px; right: 20px; display: flex; flex-direction: row; gap: 10px; z-index: 2000; }
-.puzzle-page .bottom-buttons button { padding: 6px 14px; font-size: inherit; border-radius: 6px; width: 100px; }
-.puzzle-page .quit-popup { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.7); display:flex; justify-content:center; align-items:center; z-index: 1000; }
-.puzzle-page .quit-dialog { background: #1f2327; padding: 30px; border-radius: 12px; text-align: center; color: white; min-width: 300px; }
-
-.medium-popup { position: fixed; top:0; left:0; width:100vw; height:100vh; background: rgba(0,0,0,0.65); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); display:flex; justify-content:center; align-items:center; z-index:5000; color:white; font-size:clamp(2.5rem,8vw,6rem); font-weight:bold; text-shadow:3px 3px 8px black; cursor:pointer; text-align:center; white-space: pre-wrap; word-break:break-word; padding:20px; box-sizing:border-box; }
-
-.ready-popup { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; margin: 0; padding: 0; background: rgba(0,0,0,0.65); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); display: flex; justify-content: center; align-items: center; z-index: 5000; }
-
-.ready-dialog { background: #1f2327; padding: 40px; border-radius: 12px; text-align: center; color: white; }
-
-.ready-dialog p { font-size: 2rem; margin-bottom: 20px; }
-
-.ready-dialog button { font-size: 1.5rem; padding: 12px 24px; border-radius: 8px; border: none; background: #2b3238; color: white; cursor: pointer; transition: 0.2s; }
-
-.ready-dialog button:hover { transform: scale(1.05); background: #3a4147; }
-
-.correct-btn, .wrong-btn { padding: 8px 12px; border-radius: 8px; border: 2px solid #00000060; cursor: pointer; font-size: 0.95rem; }
-.correct-btn { background: #1f7a1f; color: white; }
-.correct-btn:hover { transform: scale(1.03); }
-.wrong-btn { background: #7a1f1f; color: white; }
-.wrong-btn:hover { transform: scale(1.03); }
-
-/* ==== FULLSCREEN BUTTON ==== */#fullscreenBtn {
-    position: fixed;
-    top: 16px;
-    right: 16px;
-    z-index: 7000;
-    background: transparent;        /* fully transparent */
-    color: white;                   /* icon color */
-    border: none;                   /* remove border */
-    border-radius: 10px;
-    padding: 8px 14px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-#fullscreenBtn:hover {
-    background: rgba(255, 255, 255, 0.1); /* subtle hover effect */
-    transform: scale(1.05);
-}
-
-</style>
 </head>
 <body>
 
@@ -212,7 +34,7 @@ html, body {
         <div class="tv-foot-left"></div>
         <div class="tv-foot-right"></div>
 
-        <!-- SCORE BOX (inside tile) -->
+        <!-- SCORE BOX -->
         <div id="scoreBox" style="position:absolute; top:12px; right:12px; z-index:500; padding:6px 12px; font-size:1rem; border-radius:6px; border:2px solid #00000080; background:#1f2327; color:white;">
             Score: 0
         </div>
@@ -243,7 +65,6 @@ html, body {
 
 <div id="answerPopup" class="medium-popup" style="display:none;"></div>
 
-
 <div id="playMorePopup" class="ready-popup" style="display:none;">
     <div class="ready-dialog">
         <p>Do you want to play more?</p>
@@ -253,6 +74,8 @@ html, body {
         </div>
     </div>
 </div>
+
+<script src="script.js"></script>
 
 <script>
 // PARTICLES
@@ -296,54 +119,12 @@ function quitGame() {
         </div>
     </div>`;
     document.body.appendChild(box);
-    document.getElementById("yesQuit").onclick = () => { document.querySelector(".puzzle-page").classList.remove("show"); setTimeout(()=>window.location.href="categories.html",300); };
+    document.getElementById("yesQuit").onclick = () => { window.location.href="categories.html"; };
     document.getElementById("noQuit").onclick = () => box.remove();
 }
 
 function transitionBack() {
-    document.querySelector(".puzzle-page").classList.remove("show");
-    setTimeout(() => window.location.href="categories.html", 300);
-}
-
-// FULLSCREEN BUTTON LOGIC
-const fullscreenBtn = document.getElementById("fullscreenBtn");
-
-fullscreenBtn.addEventListener("click", () => {
-    if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen();
-    } else {
-        document.exitFullscreen();
-    }
-});
-
-// Hide/show fullscreen button on fullscreen change
-document.addEventListener("fullscreenchange", () => {
-    if (document.fullscreenElement) {
-        fullscreenBtn.style.display = "none"; // hide button
-    } else {
-        fullscreenBtn.style.display = "block"; // show button
-    }
-});
-
-// CONFETTI
-function triggerConfetti() {
-    const canvas = document.createElement("canvas");
-    canvas.id = "confettiCanvas";
-    canvas.style.position="absolute"; canvas.style.top=0; canvas.style.left=0; canvas.style.width="100%"; canvas.style.height="100%"; canvas.style.pointerEvents="none"; canvas.style.zIndex=10;
-    const answerPopup = document.getElementById("answerPopup");
-    answerPopup.appendChild(canvas);
-    const ctx = canvas.getContext("2d");
-    const pieces=[]; for(let i=0;i<150;i++){ pieces.push({ x: Math.random()*canvas.clientWidth, y: Math.random()*-50, size:5+Math.random()*8, speed:2+Math.random()*4 }); }
-    function update() { ctx.clearRect(0,0,canvas.width,canvas.height); pieces.forEach(p=>{ p.y+=p.speed; ctx.fillStyle=`hsl(${Math.random()*360},100%,50%)`; ctx.fillRect(p.x,p.y,p.size,p.size); }); requestAnimationFrame(update); }
-    canvas.width = answerPopup.clientWidth;
-    canvas.height = answerPopup.clientHeight;
-    update();
-    setTimeout(()=>canvas.remove(),2500);
-}
-
-// SHOW MEDIUM / PLAY MORE POPUP
-function showMediumPopup(){
-    document.getElementById("playMorePopup").style.display="flex";
+    window.location.href="categories.html";
 }
 
 // READY POPUP
@@ -362,6 +143,51 @@ document.addEventListener("DOMContentLoaded",()=>{
     quitReadyBtn.addEventListener("click", ()=>{ window.location.href = "categories.html"; });
 });
 
+// FULLSCREEN BUTTON LOGIC
+const fsBtn = document.getElementById("fullscreenBtn");
+fsBtn.addEventListener("click", () => {
+    if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err=>console.warn(err));
+    } else {
+        document.exitFullscreen();
+    }
+});
+
+// Hide fullscreen button when in fullscreen
+document.addEventListener("fullscreenchange", () => {
+    fsBtn.style.display = document.fullscreenElement ? "none" : "block";
+});
+
+// CONFETTI FUNCTION
+function triggerConfetti(){
+    const canvas = document.createElement("canvas");
+    canvas.id = "confettiCanvas";
+    canvas.style.position="absolute";
+    canvas.style.top=0; canvas.style.left=0;
+    canvas.style.width="100%"; canvas.style.height="100%";
+    canvas.style.pointerEvents="none";
+    canvas.style.zIndex=10;
+    document.body.appendChild(canvas);
+    const ctx = canvas.getContext("2d");
+    const pieces=[];
+    for(let i=0;i<150;i++){ 
+        pieces.push({ x: Math.random()*canvas.clientWidth, y: Math.random()*-50, size:5+Math.random()*8, speed:2+Math.random()*4 });
+    }
+    function update(){
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        pieces.forEach(p=>{
+            p.y+=p.speed;
+            ctx.fillStyle=`hsl(${Math.random()*360},100%,50%)`;
+            ctx.fillRect(p.x,p.y,p.size,p.size);
+        });
+        requestAnimationFrame(update);
+    }
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    update();
+    setTimeout(()=>canvas.remove(),2500);
+}
+
 // INIT GAME
 function initGame(){
     const category = getQueryParam("category") || "Brand Logos";
@@ -369,195 +195,195 @@ function initGame(){
 
     const puzzleSets = {
         "Brand Logos": [
-            { img:"images/brand_apple.png", answer:"Apple" },
-            { img:"images/brand_disneyland.png", answer:"Disneyland" },
-            { img:"images/brand_fedex.png", answer:"FedEx" },
-            { img:"images/brand_firefox.png", answer:"Firefox" },
-            { img:"images/brand_nike.png", answer:"Nike" },
-            { img:"images/brand_oreo.png", answer:"Oreo" },
-            { img:"images/brand_python.png", answer:"Python" },
-            { img:"images/brand_sprite.png", answer:"Sprite" },
-            { img:"images/brand_starbucks.png", answer:"Starbucks" },
-            { img:"images/brand_twitter.png", answer:"Twitter" },
-            { img:"images/brand_facebook.png", answer:"Facebook" },
-            { img:"images/brand_lego.png", answer:"Lego" },
-            { img:"images/brand_paypal.png", answer:"PayPal" },
-            { img:"images/brand_pepsi.png", answer:"Pepsi" },
-            { img:"images/brand_pinterest.png", answer:"Pinterest" },
-            { img:"images/brand_redbull.png", answer:"RedBull" },
-            { img:"images/brand_samsung.png", answer:"Samsung" },
-            { img:"images/brand_shell.png", answer:"Shell" },
-            { img:"images/brand_snapchat.png", answer:"Snapchat" },
-            { img:"images/brand_subway.png", answer:"Subway" },
-            { img:"images/brand_fujifilm.png", answer:"Fujifilm" },
-            { img:"images/brand_rolex.png", answer:"Rolex" },
-            { img:"images/brand_intel.png", answer:"Intel" },
-            { img:"images/brand_cornetto.png", answer:"Cornetto" },
-            { img:"images/brand_drpepper.png", answer:"Dr Pepper" },
-            { img:"images/brand_lamborgini.png", answer:"Lamborghini" },
-            { img:"images/brand_microsoft.png", answer:"Microsoft" },
-            { img:"images/brand_lipton.png", answer:"Lipton" },
-            { img:"images/brand_mitsubishi.png", answer:"Mitsubishi" },
-            { img:"images/brand_hermes.png", answer:"Hermès" }
-        ],
+            { img:"images/brand_apple.png", answer:"Apple", hint:"A fruit and a tech company" },
+            { img:"images/brand_disneyland.png", answer:"Disneyland", hint:"A famous theme park" },
+            { img:"images/brand_fedex.png", answer:"FedEx", hint:"Famous delivery service" },
+            { img:"images/brand_firefox.png", answer:"Firefox", hint:"A web browser with a fox" },
+            { img:"images/brand_nike.png", answer:"Nike", hint:"Just do it" },
+            { img:"images/brand_oreo.png", answer:"Oreo", hint:"Famous sandwich cookie" },
+            { img:"images/brand_python.png", answer:"Python", hint:"A programming language or a snake" },
+            { img:"images/brand_sprite.png", answer:"Sprite", hint:"A lemon-lime soft drink" },
+            { img:"images/brand_starbucks.png", answer:"Starbucks", hint:"Coffee chain with a mermaid" },
+            { img:"images/brand_twitter.png", answer:"Twitter", hint:"Social media with birds" },
+            { img:"images/brand_facebook.png", answer:"Facebook", hint:"Blue social networking platform" },
+            { img:"images/brand_lego.png", answer:"Lego", hint:"Plastic building bricks" },
+            { img:"images/brand_paypal.png", answer:"PayPal", hint:"Online payment service" },
+            { img:"images/brand_pepsi.png", answer:"Pepsi", hint:"Fizzy drink competitor of Coke" },
+            { img:"images/brand_pinterest.png", answer:"Pinterest", hint:"Platform for saving ideas visually" },
+            { img:"images/brand_redbull.png", answer:"RedBull", hint:"Energy drink with wings" },
+            { img:"images/brand_samsung.png", answer:"Samsung", hint:"Electronics brand from Korea" },
+            { img:"images/brand_shell.png", answer:"Shell", hint:"Oil company with a shell logo" },
+            { img:"images/brand_snapchat.png", answer:"Snapchat", hint:"Social media with disappearing messages" },
+            { img:"images/brand_subway.png", answer:"Subway", hint:"Sandwich fast food chain" },
+            { img:"images/brand_fujifilm.png", answer:"Fujifilm", hint:"Camera and photography brand" },
+            { img:"images/brand_rolex.png", answer:"Rolex", hint:"Luxury watch brand" },
+            { img:"images/brand_intel.png", answer:"Intel", hint:"Computer processor maker" },
+            { img:"images/brand_cornetto.png", answer:"Cornetto", hint:"Ice cream cone brand" },
+            { img:"images/brand_drpepper.png", answer:"Dr Pepper", hint:"Soft drink with unique flavor" },
+            { img:"images/brand_lamborgini.png", answer:"Lamborghini", hint:"Luxury Italian sports car" },
+            { img:"images/brand_microsoft.png", answer:"Microsoft", hint:"Software company behind Windows" },
+            { img:"images/brand_lipton.png", answer:"Lipton", hint:"Popular tea brand" },
+            { img:"images/brand_mitsubishi.png", answer:"Mitsubishi", hint:"Japanese car and electronics company" },
+            { img:"images/brand_hermes.png", answer:"Hermès", hint:"Luxury fashion brand" }
+],
 
         "Movies": [
-            { img:"images/ghost_rider.png", answer:"Ghost Rider" },
-            { img:"images/bee_movie.png", answer:"Bee Movie" },
-            { img:"images/lion_king.png", answer:"Lion King" },
-            { img:"images/spider_man.png", answer:"Spider Man" },
-            { img:"images/ant_man.png", answer:"Ant Man" },
-            { img:"images/king_of_speech.png", answer:"King Of Speech" },
-            { img:"images/car_2.png", answer:"Car 2" },
-            { img:"images/girl_in_the_next_door.png", answer:"Girl In The Next Door" },
-            { img:"images/rocket_man.png", answer:"Rocket Man" },
-            { img:"images/ice_man.png", answer:"Ice Man" },
-            { img:"images/ghost_call.png", answer:"Ghost Call" },
-            { img:"images/back_to_future.png", answer:"Back To Future" },
-            { img:"images/karate_kid.png", answer:"Karate Kid" },
-            { img:"images/a_beautiful_mind.png", answer:"A Beautiful Mind" },
-            { img:"images/social_web.png", answer:"Social Web" },
-            { img:"images/she_is_gone.png", answer:"She Is Gone" },
-            { img:"images/iniside_out.png", answer:"Iniside Out" },
-            { img:"images/no_county_for_oldman.png", answer:"No County For Oldman" },
-            { img:"images/parasite.png", answer:"Parasite" },
-            { img:"images/blade_runner.png", answer:"Blade Runner" },
-            { img:"images/pirate_adventure.png", answer:"Pirate Adventure" },
-            { img:"images/she's_reading_part_2.png", answer:"She's Reading Part 2" },
-            { img:"images/7_king_speech.png", answer:"7 King Speech" },
-            { img:"images/rocketman_to_star.png", answer:"Rocketman To Star" },
-            { img:"images/charlie_chocolate_factory.png", answer:"Charlie Chocolate Factory" },
-            { img:"images/seven_ghost_in_the_house.png", answer:"Seven Ghost In The House" },
-            { img:"images/eye_love_alien.png", answer:"Eye Love Alien" },
-            { img:"images/3_alien_in_the_space.png", answer:"3 Alien In The Space" },
-            { img:"images/eye_love_small.png", answer:"Eye Love Small" },
-            { img:"images/now_you_see_me.png", answer:"Now You See Me" }
-
+            { img:"images/ghost_rider.png", answer:"Ghost Rider", hint:"Marvel hero with a flaming skull" },
+            { img:"images/bee_movie.png", answer:"Bee Movie", hint:"Animated film about an insect" },
+            { img:"images/lion_king.png", answer:"Lion King", hint:"Disney animated classic in Africa" },
+            { img:"images/spider_man.png", answer:"Spider Man", hint:"Hero with webs and a mask" },
+            { img:"images/ant_man.png", answer:"Ant Man", hint:"Marvel hero who shrinks" },
+            { img:"images/king_of_speech.png", answer:"King Of Speech", hint:"Movie about delivering speeches" },
+            { img:"images/car_2.png", answer:"Car 2", hint:"Animated movie featuring vehicles" },
+            { img:"images/girl_in_the_next_door.png", answer:"Girl In The Next Door", hint:"Title includes a girl and location" },
+            { img:"images/rocket_man.png", answer:"Rocket Man", hint:"Biopic about a famous musician" },
+            { img:"images/ice_man.png", answer:"Ice Man", hint:"Movie with 'man' in the title" },
+            { img:"images/ghost_call.png", answer:"Ghost Call", hint:"Involves a spectral phone call" },
+            { img:"images/back_to_future.png", answer:"Back To Future", hint:"Time travel classic" },
+            { img:"images/karate_kid.png", answer:"Karate Kid", hint:"A young martial artist" },
+            { img:"images/a_beautiful_mind.png", answer:"A Beautiful Mind", hint:"Movie about a mathematician" },
+            { img:"images/social_web.png", answer:"Social Web", hint:"About online social connections" },
+            { img:"images/she_is_gone.png", answer:"She Is Gone", hint:"Title suggests disappearance" },
+            { img:"images/iniside_out.png", answer:"Iniside Out", hint:"Animated film about emotions" },
+            { img:"images/no_county_for_oldman.png", answer:"No County For Oldman", hint:"Thriller movie title" },
+            { img:"images/parasite.png", answer:"Parasite", hint:"Oscar-winning Korean thriller" },
+            { img:"images/blade_runner.png", answer:"Blade Runner", hint:"Sci-fi detective film" },
+            { img:"images/pirate_adventure.png", answer:"Pirate Adventure", hint:"Swashbuckling at sea" },
+            { img:"images/she's_reading_part_2.png", answer:"She's Reading Part 2", hint:"Sequel title about reading" },
+            { img:"images/7_king_speech.png", answer:"7 King Speech", hint:"Number and speech in the title" },
+            { img:"images/rocketman_to_star.png", answer:"Rocketman To Star", hint:"Journey of a famous musician" },
+            { img:"images/charlie_chocolate_factory.png", answer:"Charlie Chocolate Factory", hint:"Classic story about candy" },
+            { img:"images/seven_ghost_in_the_house.png", answer:"Seven Ghost In The House", hint:"Haunted house movie" },
+            { img:"images/eye_love_alien.png", answer:"Eye Love Alien", hint:"Wordplay involving eyesight" },
+            { img:"images/3_alien_in_the_space.png", answer:"3 Alien In The Space", hint:"Sci-fi with aliens" },
+            { img:"images/eye_love_small.png", answer:"Eye Love Small", hint:"Title plays on vision" },
+            { img:"images/now_you_see_me.png", answer:"Now You See Me", hint:"Magic and heists" }
         ],
+
         "Idioms": [
-            { img:"images/walking_on_eggshells.png", answer:"Walking on Eggshells" },
-            { img:"images/a_bright_idea.png", answer:"A Bright Idea" },
-            { img:"images/butter_someone_up.png", answer:"Butter Someone Up" },
-            { img:"images/breadwinner.png", answer:"Breadwinner" },
-            { img:"images/time_to_sleep.png", answer:"Time to Sleep" },
-            { img:"images/brainstorm.png", answer:"Brainstorm" },
-            { img:"images/belief.png", answer:"Belief" },
-            { img:"images/firehouse.png", answer:"Firehouse" },
-            { img:"images/icebox.png", answer:"Icebox" },
-            { img:"images/follow_your_heart.png", answer:"Follow Your Heart" },
-            { img:"images/elephant_in_the_room.png", answer:"Elephant in the Room" },
-            { img:"images/it's_raining_cats_and_dogs.png", answer:"It's Raining Cats and Dogs" },
-            { img:"images/don't_let_the_bedbugs_bite.png", answer:"Don't Let the Bedbugs Bite" },
-            { img:"images/break_the_ice.png", answer:"Break the Ice" },
-            { img:"images/hit_the_hay.png", answer:"Hit the Hay" },
-            { img:"images/time_heals_all_wounds.png", answer:"Time Heals All Wounds" },
-            { img:"images/playing_with_fire.png", answer:"Playing with Fire" },
-            { img:"images/apple_of_my_eye.png", answer:"Apple of My Eye" },
-            { img:"images/think_outside_the_box.png", answer:"Think Outside the Box" },
-            { img:"images/knock_on_wood.png", answer:"Knock on Wood" },
-            { img:"images/world_without_end.png", answer:"World Without End" },
-            { img:"images/running_out_of_time.png", answer:"Running Out of Time" },
-            { img:"images/hotter_than_the_bed.png", answer:"Hotter Than the Bed" },
-            { img:"images/irrelevant.png", answer:"Irrelevant" },
-            { img:"images/cancel_the_plan.png", answer:"Cancel the Plan" },
-            { img:"images/a_quick_word.png", answer:"A Quick Word" },
-            { img:"images/think_twice.png", answer:"Think Twice" },
-            { img:"images/mismatch.png", answer:"Mismatch" },
-            { img:"images/twisted_reflection.png", answer:"Twisted Reflection" },
-            { img:"images/speechless.png", answer:"Speechless" }
+            { img:"images/walking_on_eggshells.png", answer:"Walking on Eggshells", hint:"Being very cautious" },
+            { img:"images/a_bright_idea.png", answer:"A Bright Idea", hint:"A clever thought" },
+            { img:"images/butter_someone_up.png", answer:"Butter Someone Up", hint:"Flatter someone" },
+            { img:"images/breadwinner.png", answer:"Breadwinner", hint:"Main income earner" },
+            { img:"images/time_to_sleep.png", answer:"Time to Sleep", hint:"When it's bedtime" },
+            { img:"images/brainstorm.png", answer:"Brainstorm", hint:"Generate ideas quickly" },
+            { img:"images/belief.png", answer:"Belief", hint:"Conviction or trust" },
+            { img:"images/firehouse.png", answer:"Firehouse", hint:"Where firefighters work" },
+            { img:"images/icebox.png", answer:"Icebox", hint:"Old term for refrigerator" },
+            { img:"images/follow_your_heart.png", answer:"Follow Your Heart", hint:"Do what you feel is right" },
+            { img:"images/elephant_in_the_room.png", answer:"Elephant in the Room", hint:"An obvious problem ignored" },
+            { img:"images/it's_raining_cats_and_dogs.png", answer:"It's Raining Cats and Dogs", hint:"Heavy rainfall" },
+            { img:"images/don't_let_the_bedbugs_bite.png", answer:"Don't Let the Bedbugs Bite", hint:"Good night saying" },
+            { img:"images/break_the_ice.png", answer:"Break the Ice", hint:"Start a conversation" },
+            { img:"images/hit_the_hay.png", answer:"Hit the Hay", hint:"Go to sleep" },
+            { img:"images/time_heals_all_wounds.png", answer:"Time Heals All Wounds", hint:"Emotional recovery" },
+            { img:"images/playing_with_fire.png", answer:"Playing with Fire", hint:"Taking risks" },
+            { img:"images/apple_of_my_eye.png", answer:"Apple of My Eye", hint:"Someone very precious" },
+            { img:"images/think_outside_the_box.png", answer:"Think Outside the Box", hint:"Be creative" },
+            { img:"images/knock_on_wood.png", answer:"Knock on Wood", hint:"Avoid bad luck" },
+            { img:"images/world_without_end.png", answer:"World Without End", hint:"Eternal or infinite" },
+            { img:"images/running_out_of_time.png", answer:"Running Out of Time", hint:"Limited time left" },
+            { img:"images/hotter_than_the_bed.png", answer:"Hotter Than the Bed", hint:"Very warm" },
+            { img:"images/irrelevant.png", answer:"Irrelevant", hint:"Not important" },
+            { img:"images/cancel_the_plan.png", answer:"Cancel the Plan", hint:"Stop what was scheduled" },
+            { img:"images/a_quick_word.png", answer:"A Quick Word", hint:"Brief conversation" },
+            { img:"images/think_twice.png", answer:"Think Twice", hint:"Consider carefully" },
+            { img:"images/mismatch.png", answer:"Mismatch", hint:"Not a proper fit" },
+            { img:"images/twisted_reflection.png", answer:"Twisted Reflection", hint:"Distorted image" },
+            { img:"images/speechless.png", answer:"Speechless", hint:"Lost for words" }
         ],
-        "Animals": [
-            { img: "images/bee.png", answer: "Bee" },
-            { img: "images/bird.png", answer: "Bird" },
-            { img: "images/monkey.png", answer: "Monkey" },
-            { img: "images/dog.png", answer: "Dog" },
-            { img: "images/cat.png", answer: "Cat" },
-            { img: "images/pig.png", answer: "Pig" },
-            { img: "images/rabbit.png", answer: "Rabbit" },
-            { img: "images/king_cobra.png", answer: "King Cobra" },
-            { img: "images/cow.png", answer: "Cow" },
-            { img: "images/butterfly.png", answer: "Butterfly" },
-            { img: "images/electric_eel.png", answer: "Electric Eel" },
-            { img: "images/two_legs.png", answer: "Two Legs" },
-            { img: "images/panda_bear.png", answer: "Panda Bear" },
-            { img: "images/poisonous_snake.png", answer: "Poisonous Snakes" },
-            { img: "images/eagle.png", answer: "Eagle" },
-            { img: "images/love_birds.png", answer: "Love Birds" },
-            { img: "images/goat.png", answer: "Goat" },
-            { img: "images/mammals.png", answer: "Mammals" },
-            { img: "images/reptiles.png", answer: "Reptiles" },
-            { img: "images/insects.png", answer: "Insects" },
 
+        "Animals": [
+            { img: "images/bee.png", answer: "Bee", hint:"Makes honey" },
+            { img: "images/bird.png", answer: "Bird", hint:"Has feathers and wings" },
+            { img: "images/monkey.png", answer: "Monkey", hint:"Climbs trees" },
+            { img: "images/dog.png", answer: "Dog", hint:"Man's best friend" },
+            { img: "images/cat.png", answer: "Cat", hint:"Loves to purr" },
+            { img: "images/pig.png", answer: "Pig", hint:"Pink farm animal" },
+            { img: "images/rabbit.png", answer: "Rabbit", hint:"Has long ears and hops" },
+            { img: "images/king_cobra.png", answer: "King Cobra", hint:"Venomous snake" },
+            { img: "images/cow.png", answer: "Cow", hint:"Gives milk" },
+            { img: "images/butterfly.png", answer: "Butterfly", hint:"Insect with colorful wings" },
+            { img: "images/electric_eel.png", answer: "Electric Eel", hint:"Generates electricity" },
+            { img: "images/two_legs.png", answer: "Two Legs", hint:"Number of legs humans stand on" },
+            { img: "images/panda_bear.png", answer: "Panda Bear", hint:"Black and white bamboo eater" },
+            { img: "images/poisonous_snake.png", answer: "Poisonous Snakes", hint:"Dangerous reptiles" },
+            { img: "images/eagle.png", answer: "Eagle", hint:"Bird of prey" },
+            { img: "images/love_birds.png", answer: "Love Birds", hint:"Small colorful parrots" },
+            { img: "images/goat.png", answer: "Goat", hint:"Has horns and bleats" },
+            { img: "images/mammals.png", answer: "Mammals", hint:"Animals that feed milk" },
+            { img: "images/reptiles.png", answer: "Reptiles", hint:"Cold-blooded animals" },
+            { img: "images/insects.png", answer: "Insects", hint:"Six-legged creatures" }
         ],
+
         "Sports": [
-            { img: "images/marathon.png", answer: "Marathon" },
-            { img: "images/soccer.png", answer: "Soccer" },
-            { img: "images/basketball.png", answer: "Basketball" },
-            { img: "images/tennis.png", answer: "Tennis" },
-            { img: "images/swimming.png", answer: "Swimming" },
-            { img: "images/boxing.png", answer: "Boxing" },
-            { img: "images/golf.png", answer: "Golf" },
-            { img: "images/ice_hockey.png", answer: "Ice Hockey" },
-            { img: "images/archery.png", answer: "Archery" },
-            { img: "images/rock_climbing.png", answer: "Rock Climbing" },
-            { img: "images/downhill_skiing.png", answer: "Downhill Skiing" },
-            { img: "images/fishing.png", answer: "Fishing" },
-            { img: "images/longboard_surfing.png", answer: "Longboard Surfing" },
-            { img: "images/100_meter_sprint.png", answer: "100 Meter Sprint" },
-            { img: "images/weightlifting.png", answer: "Weightlifting" },
-            { img: "images/road_cycling.png", answer: "Road Cycling" },
-            { img: "images/fencing.png", answer: "Fencing" },
-            { img: "images/water_volleyball.png", answer: "Water Volleyball" },
-            { img: "images/gymnastics.png", answer: "Gymnastics" },
-            { img: "images/hurdles.png", answer: "Hurdles" },
-            { img: "images/ice_curling.png", answer: "Ice Curling" },
-            { img: "images/track_relay.png", answer: "Track Relay" },
-            { img: "images/long_jump.png", answer: "Long Jump" },
-            { img: "images/equestrian_target.png", answer: "Equestrian Target" },
-            { img: "images/kickboxing.png", answer: "Kickboxing" },
-            { img: "images/karate.png", answer: "Karate" },
-            { img: "images/judo.png", answer: "Judo" },
-            { img: "images/sepak_takraw.png", answer: "Sepak Takraw" },
-            { img: "images/cricket.png", answer: "Cricket" },
-            { img: "images/sumo_wrestling.png", answer: "Sumo Wrestling" },
+            { img: "images/marathon.png", answer: "Marathon", hint:"Long-distance running" },
+            { img: "images/soccer.png", answer: "Soccer", hint:"Played with a round ball on a field" },
+            { img: "images/basketball.png", answer: "Basketball", hint:"Throw a ball into a hoop" },
+            { img: "images/tennis.png", answer: "Tennis", hint:"Played with rackets and a net" },
+            { img: "images/swimming.png", answer: "Swimming", hint:"Moving in water" },
+            { img: "images/boxing.png", answer: "Boxing", hint:"Fighting with gloves" },
+            { img: "images/golf.png", answer: "Golf", hint:"Hit a ball into a hole" },
+            { img: "images/ice_hockey.png", answer: "Ice Hockey", hint:"Played on ice with sticks" },
+            { img: "images/archery.png", answer: "Archery", hint:"Shoot arrows at targets" },
+            { img: "images/rock_climbing.png", answer: "Rock Climbing", hint:"Climbing steep surfaces" },
+            { img: "images/downhill_skiing.png", answer: "Downhill Skiing", hint:"Snow sport going fast down slopes" },
+            { img: "images/fishing.png", answer: "Fishing", hint:"Catching fish in water" },
+            { img: "images/longboard_surfing.png", answer: "Longboard Surfing", hint:"Riding waves on a long board" },
+            { img: "images/100_meter_sprint.png", answer: "100 Meter Sprint", hint:"Short-distance race" },
+            { img: "images/weightlifting.png", answer: "Weightlifting", hint:"Lifting heavy weights" },
+            { img: "images/road_cycling.png", answer: "Road Cycling", hint:"Bicycle racing on roads" },
+            { img: "images/fencing.png", answer: "Fencing", hint:"Sword fighting sport" },
+            { img: "images/water_volleyball.png", answer: "Water Volleyball", hint:"Played in swimming pool" },
+            { img: "images/gymnastics.png", answer: "Gymnastics", hint:"Physical exercises and routines" },
+            { img: "images/hurdles.png", answer: "Hurdles", hint:"Race with barriers" },
+            { img: "images/ice_curling.png", answer: "Ice Curling", hint:"Sliding stones on ice" },
+            { img: "images/track_relay.png", answer: "Track Relay", hint:"Team running event" },
+            { img: "images/long_jump.png", answer: "Long Jump", hint:"Jumping far distance" },
+            { img: "images/equestrian_target.png", answer: "Equestrian Target", hint:"Horse riding with targets" },
+            { img: "images/kickboxing.png", answer: "Kickboxing", hint:"Martial arts with punches and kicks" },
+            { img: "images/karate.png", answer: "Karate", hint:"Japanese martial art" },
+            { img: "images/judo.png", answer: "Judo", hint:"Throwing martial art" },
+            { img: "images/sepak_takraw.png", answer: "Sepak Takraw", hint:"Kick a ball over a net using feet" },
+            { img: "images/cricket.png", answer: "Cricket", hint:"Bat-and-ball sport" },
+            { img: "images/sumo_wrestling.png", answer: "Sumo Wrestling", hint:"Japanese wrestling with large competitors" }
         ],
-        
+
         "Food": [
-	    { img:"images/margarita.png", answer:"Margarita" },
-        { img:"images/pineapple.png", answer:"Pineapple" },
-        { img:"images/sunny_side_up.png", answer:"Sunny Side Up" },
-        { img:"images/mac_and_cheese.png", answer:"Mac and Cheese" },
-        { img:"images/onion_ring.png", answer:"Onion Ring" },
-        { img:"images/bánh_mì.png", answer:"Bánh Mì" },
-        { img:"images/grilled_steak.png", answer:"Grilled Steak" },
-        { img:"images/popcorn.png", answer:"Popcorn" },
-        { img:"images/pad_thai.png", answer:"Pad Thai" },
-        { img:"images/lemonade.png", answer:"Lemonade" },
-        { img:"images/pesto_pasta.png", answer:"Pesto Pasta" },
-        { img:"images/hot_chocolate.png", answer:"Hot Chocolate" },
-        { img:"images/corn_flakes.png", answer:"Corn Flakes" },
-        { img:"images/chicken_salad.png", answer:"Chicken Salad" },
-        { img:"images/spring_rolls.png", answer:"Spring Rolls" },
-        { img:"images/banana_split.png", answer:"Banana Split" },
-        { img:"images/tequila_sunrise.png", answer:"Tequila Sunrise" },
-        { img:"images/grape_wine.png", answer:"Grape Wine" },
-        { img:"images/french_toast.png", answer:"French Toast" },
-        { img:"images/hotpot.png", answer:"Hotpot" },
-        { img:"images/s'mores.png", answer:"S'mores" },
-        { img:"images/iced_coffee.png", answer:"Iced Coffee" },
-        { img:"images/bread.png", answer:"Bread" },
-        { img:"images/mushroom-soup.png", answer:"Mushroom Soup" },
-        { img:"images/rice.png", answer:"Rice" },
-        { img:"images/fortune_cookie.png", answer:"Fortune Cookie" },
-        { img:"images/hawaiian_pizza.png", answer:"Hawaiian Pizza" },
-    ]
+            { img:"images/margarita.png", answer:"Margarita", hint:"A cocktail with lime" },
+            { img:"images/pineapple.png", answer:"Pineapple", hint:"Tropical fruit with spikes" },
+            { img:"images/sunny_side_up.png", answer:"Sunny Side Up", hint:"Fried egg style" },
+            { img:"images/mac_and_cheese.png", answer:"Mac and Cheese", hint:"Pasta with cheese" },
+            { img:"images/onion_ring.png", answer:"Onion Ring", hint:"Deep fried vegetable ring" },
+            { img:"images/bánh_mì.png", answer:"Bánh Mì", hint:"Vietnamese sandwich" },
+            { img:"images/grilled_steak.png", answer:"Grilled Steak", hint:"Cooked beef on a grill" },
+            { img:"images/popcorn.png", answer:"Popcorn", hint:"Popped corn kernels" },
+            { img:"images/pad_thai.png", answer:"Pad Thai", hint:"Thai stir-fried noodles" },
+            { img:"images/lemonade.png", answer:"Lemonade", hint:"Lemon drink" },
+            { img:"images/pesto_pasta.png", answer:"Pesto Pasta", hint:"Noodles with basil sauce" },
+            { img:"images/hot_chocolate.png", answer:"Hot Chocolate", hint:"Warm cocoa drink" },
+            { img:"images/corn_flakes.png", answer:"Corn Flakes", hint:"Breakfast cereal" },
+            { img:"images/chicken_salad.png", answer:"Chicken Salad", hint:"Mixed greens with poultry" },
+            { img:"images/spring_rolls.png", answer:"Spring Rolls", hint:"Wrapped vegetable appetizer" },
+            { img:"images/banana_split.png", answer:"Banana Split", hint:"Dessert with ice cream and banana" },
+            { img:"images/tequila_sunrise.png", answer:"Tequila Sunrise", hint:"Cocktail with orange and grenadine" },
+            { img:"images/grape_wine.png", answer:"Grape Wine", hint:"Fermented fruit drink" },
+            { img:"images/french_toast.png", answer:"French Toast", hint:"Bread dipped in egg and fried" },
+            { img:"images/hotpot.png", answer:"Hotpot", hint:"Communal cooking in broth" },
+            { img:"images/s'mores.png", answer:"S'mores", hint:"Chocolate and marshmallow snack" },
+            { img:"images/iced_coffee.png", answer:"Iced Coffee", hint:"Cold caffeinated drink" },
+            { img:"images/bread.png", answer:"Bread", hint:"Staple baked food" },
+            { img:"images/mushroom-soup.png", answer:"Mushroom Soup", hint:"Creamy fungi-based soup" },
+            { img:"images/rice.png", answer:"Rice", hint:"Common grain staple" },
+            { img:"images/fortune_cookie.png", answer:"Fortune Cookie", hint:"Sweet cookie with a message" },
+            { img:"images/hawaiian_pizza.png", answer:"Hawaiian Pizza", hint:"Topped with ham and pineapple" }
+]
 
     };
 
     const imagesArray = puzzleSets[category];
     let currentIndex = 0;
     let score = 0;
-    let hintPressed = false;
 
     const puzzleImage = document.getElementById("puzzleImage");
     const hintBtn = document.getElementById("hintBtn");
@@ -579,32 +405,61 @@ function initGame(){
         currentIndex=index;
         puzzleImage.src = imagesArray[currentIndex].img;
         hintBtn.disabled=false;
-        hintPressed=false;
         nextBtn.disabled = true;
     }
 
     nextBtn.addEventListener("click",()=>showImage(currentIndex+1));
     prevBtn.addEventListener("click",()=>showImage(currentIndex-1));
 
-    correctBtn.addEventListener("click", () => {
-    score++;
-    scoreBox.textContent = "Score: " + score;
 
-    nextBtn.disabled = false;
-    hintPressed = true;
 
-    if(currentIndex === imagesArray.length -1){
-        answerPopup.style.display = "flex";
-        answerPopup.textContent = `✔Correct!`; 
-        triggerConfetti();
-        finishSound.play();
-        setTimeout(()=>{ answerPopup.style.display="none"; showMediumPopup(); }, 1800);
-    } else {
-        answerPopup.style.display = "flex";
-        answerPopup.textContent = `✔Correct!`; 
-        correctSound.play();
+
+    // Function to update score display
+    function updateScoreDisplay() {
+        scoreBox.textContent = `${score}/${currentIndex + 1}`;
     }
-});
+
+    // Correct button
+    correctBtn.addEventListener("click", () => {
+        score++; // increment correct guesses
+        updateScoreDisplay();
+        nextBtn.disabled = false; // enable next
+
+        answerPopup.style.display = "flex";
+        answerPopup.textContent = `Correct! Answer: ${imagesArray[currentIndex].answer}`;
+        correctSound.play();
+
+        if(currentIndex === imagesArray.length - 1){
+            triggerConfetti();
+            finishSound.play();
+
+            // Show final score first
+            answerPopup.style.display = "flex";
+            answerPopup.textContent = `Final Score:\n${score}/${imagesArray.length}`;
+
+            // After 15 seconds, hide final score and show play more popup
+            setTimeout(()=>{ 
+                answerPopup.style.display = "none"; 
+                document.getElementById("playMorePopup").style.display="flex"; 
+            }, 15000); // 15000ms = 15 seconds
+}
+
+    });
+
+    // Wrong button
+    wrongBtn.addEventListener("click", () => {
+        nextBtn.disabled = false; // enable next even if wrong
+        updateScoreDisplay(); // show current correct / images seen
+        answerPopup.style.display = "flex";
+        answerPopup.textContent = `✖ Wrong!\nTry again.`;
+        wrongSound.play();
+    });
+
+
+
+
+
+
 
     wrongBtn.addEventListener("click", () => {
         answerPopup.style.display = "flex";
@@ -612,25 +467,22 @@ function initGame(){
         wrongSound.play();
     });
 
-    hintBtn.addEventListener("click",()=>{
-        hintBtn.disabled=true;
-        hintPressed=true;
+    hintBtn.addEventListener("click", () => {
+        hintBtn.disabled = true;
         nextBtn.disabled = false;
 
+        // Show hint instead of answer
+        const hintText = imagesArray[currentIndex].hint || "No hint available";
         answerPopup.style.display = "flex";
-        answerPopup.textContent = `Answer: ${imagesArray[currentIndex].answer}`;
+        answerPopup.textContent = `Hint: ${hintText}`;
+});
 
-        if(currentIndex===imagesArray.length-1){
-            triggerConfetti();
-            finishSound.play();
-            setTimeout(()=>{ answerPopup.style.display="none"; showMediumPopup(); },5000);
-        }
-    });
 
     answerPopup.addEventListener("click",()=>{ answerPopup.style.display="none"; });
 
     showImage(0);
 }
 </script>
+
 </body>
 </html>
