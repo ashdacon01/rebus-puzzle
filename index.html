@@ -5,6 +5,29 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Rebus Puzzle Game - Welcome</title>
 <link rel="stylesheet" href="style.css">
+
+<style>
+/* Fullscreen button styles */
+.fullscreen-btn {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: 1000;
+    padding: 8px 12px;
+    font-size: 20px; /* icon size */
+    cursor: pointer;
+    border: none;
+    background-color: #b40e0e; /* blends with background */
+    color: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    transition: background-color 0.3s, opacity 0.3s;
+}
+
+.fullscreen-btn:hover {
+    background-color: #8f0b0b; /* slightly darker on hover */
+}
+</style>
 </head>
 <body>
     <div class="slide" id="welcome">
@@ -17,6 +40,9 @@
         </div>
     </div>
 
+    <!-- Fullscreen toggle button -->
+    <button id="fullscreen-btn" class="fullscreen-btn">⛶</button>
+
 <script>
 function quitGame() {
     if (confirm("Are you sure you want to quit?")) {
@@ -24,6 +50,33 @@ function quitGame() {
         setTimeout(() => window.location.href = "about:blank", 100);
     }
 }
+
+// Fullscreen toggle
+const fsBtn = document.getElementById('fullscreen-btn');
+
+fsBtn.addEventListener('click', () => {
+    if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().then(() => {
+            // Save fullscreen state so other pages can detect
+            localStorage.setItem('fullscreenEnabled', 'true');
+        }).catch(err => {
+            alert(`Error attempting to enable fullscreen: ${err.message}`);
+        });
+    } else {
+        document.exitFullscreen();
+    }
+});
+
+// Hide button in fullscreen, show when exiting
+document.addEventListener('fullscreenchange', () => {
+    if (document.fullscreenElement) {
+        fsBtn.style.display = 'none'; // Hide button in fullscreen
+    } else {
+        fsBtn.style.display = 'block'; // Show button when exiting fullscreen
+        // Clear the flag if user presses ESC
+        localStorage.removeItem('fullscreenEnabled');
+    }
+});
 </script>
 </body>
 </html>
