@@ -8,7 +8,6 @@
 
 <style>
 /* ---------- Categories Page CSS ---------- */
-
 body {
     background: #b40e0e;
     opacity: 0;
@@ -199,30 +198,32 @@ button.quit-btn:hover {
 document.addEventListener("DOMContentLoaded", () => {
     document.body.classList.add("show");
 
-    // Automatically go fullscreen if set on index.html
-    if (localStorage.getItem('fullscreenEnabled') === 'true' && !document.fullscreenElement) {
-        document.documentElement.requestFullscreen().catch(err => {
-            console.warn("Fullscreen failed:", err);
-        });
+    // Fullscreen persistence using sessionStorage
+    if (sessionStorage.getItem('fullscreenEnabled') === 'true' && !document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => console.warn("Fullscreen failed:", err));
     }
 
+    // Category button clicks
     const categoryButtons = document.querySelectorAll('.category-btn');
     categoryButtons.forEach(button => {
         button.addEventListener('click', () => {
             const category = button.dataset.category;
             document.body.classList.remove("show");
             setTimeout(() => {
+                // Correctly encode category for puzzle.html
                 window.location.href = `puzzle.html?category=${encodeURIComponent(category)}`;
             }, 300);
         });
     });
 });
 
+// Back button
 function transitionBack() {
     document.body.classList.remove("show");
     setTimeout(() => window.location.href = "index.html", 300);
 }
 
+// Quit popup
 function quitGame() {
     if (document.querySelector(".quit-popup")) return;
 
@@ -244,26 +245,19 @@ function quitGame() {
 
 // Fullscreen toggle
 const fsBtn = document.getElementById('fullscreen-btn');
-
 fsBtn.addEventListener('click', () => {
     if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen().catch(err => {
-            alert(`Error attempting to enable fullscreen: ${err.message}`);
-        });
-        localStorage.setItem('fullscreenEnabled', 'true');
+        document.documentElement.requestFullscreen().catch(err => alert(`Error attempting fullscreen: ${err.message}`));
+        sessionStorage.setItem('fullscreenEnabled', 'true');
     } else {
         document.exitFullscreen();
-        localStorage.removeItem('fullscreenEnabled');
+        sessionStorage.removeItem('fullscreenEnabled');
     }
 });
 
 // Hide fullscreen button when in fullscreen
 document.addEventListener('fullscreenchange', () => {
-    if (document.fullscreenElement) {
-        fsBtn.style.display = 'none';
-    } else {
-        fsBtn.style.display = 'block';
-    }
+    fsBtn.style.display = document.fullscreenElement ? 'none' : 'block';
 });
 </script>
 

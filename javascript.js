@@ -1,183 +1,231 @@
 // ------------------------
-// REBUS PUZZLE CHECK SYSTEM
+// PARTICLES
 // ------------------------
-
-// Example answers per puzzle image (you can expand this)
-const puzzleAnswers = {
-    "Brand": {
-        easy: ["brand1answer", "brand2answer", "brand3answer"]
-    },
-    "Animals": {
-        easy: ["animals1answer", "animals2answer"]
-    },
-    "Movie": {
-        easy: ["movie1answer", "movie2answer"]
-    },
-    "Sports": {
-        easy: ["Sports1answer", "Sports2answer"]
-    },
-    "Idioms": {
-        easy: ["idiom1answer", "idiom2answer"]
-    },
-    "Food": {
-        easy: ["food1answer", "food2answer"]
-    }
-};
-
-// Normalize function: trims, lowercases, collapses multiple spaces
-const normalize = str => str.replace(/\s+/g, ' ').trim().toLowerCase();
-
-// ------------------------
-// FULLSCREEN SETUP
-// ------------------------
-document.addEventListener("DOMContentLoaded", () => {
-    // Automatically request fullscreen if previously active
-    if (sessionStorage.getItem("fullscreenActive") === "true") {
-        if (document.documentElement.requestFullscreen) {
-            document.documentElement.requestFullscreen();
-        }
-    }
-
-    // Create fullscreen button
-    const fsBtn = document.createElement("button");
-    fsBtn.id = "fullscreenBtn";
-    fsBtn.textContent = "⛶";
-    fsBtn.style.position = "fixed";
-    fsBtn.style.top = "20px";
-    fsBtn.style.right = "20px";
-    fsBtn.style.zIndex = "9999";
-    fsBtn.style.padding = "10px";
-    fsBtn.style.fontSize = "1.5rem";
-    fsBtn.style.background = "#b40e0e";
-    fsBtn.style.border = "none";
-    fsBtn.style.borderRadius = "6px";
-    fsBtn.style.color = "white";
-    fsBtn.style.cursor = "pointer";
-    document.body.appendChild(fsBtn);
-
-    fsBtn.addEventListener("click", () => {
-        if (document.documentElement.requestFullscreen) {
-            document.documentElement.requestFullscreen();
-        }
-        sessionStorage.setItem("fullscreenActive", "true");
+const canvas = document.getElementById("particleCanvas");
+const ctx = canvas.getContext("2d");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+const particles = [];
+for (let i = 0; i < 120; i++) {
+    particles.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, r: 1 + Math.random() * 3, d: Math.random() * 1 });
+}
+function drawParticles() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "rgba(255,255,255,0.3)";
+    particles.forEach(p => {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2, true);
+        ctx.fill();
+        p.y += 0.2 + p.d;
+        if (p.y > canvas.height) p.y = 0;
     });
+    requestAnimationFrame(drawParticles);
+}
+drawParticles();
 
-    // Hide button when in fullscreen
-    document.addEventListener("fullscreenchange", toggleFsBtn);
-    document.addEventListener("webkitfullscreenchange", toggleFsBtn);
-    document.addEventListener("mozfullscreenchange", toggleFsBtn);
-    document.addEventListener("MSFullscreenChange", toggleFsBtn);
+// ------------------------
+// GET QUERY PARAM
+// ------------------------
+function getQueryParam(param) {
+    return new URLSearchParams(window.location.search).get(param);
+}
 
-    function toggleFsBtn() {
-        if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement) {
-            fsBtn.style.display = "none";
-        } else {
-            fsBtn.style.display = "block";
-            sessionStorage.setItem("fullscreenActive", "false");
-        }
+// ------------------------
+// QUIT / BACK
+// ------------------------
+function quitGame() {
+    if (document.querySelector(".quit-popup")) return;
+    const box = document.createElement("div");
+    box.className = "quit-popup";
+    box.innerHTML = `<div class="quit-dialog">
+        <p>Are you sure you want to quit?</p>
+        <div class="quit-buttons">
+            <button id="yesQuit">Yes</button>
+            <button id="noQuit">No</button>
+        </div>
+    </div>`;
+    document.body.appendChild(box);
+    document.getElementById("yesQuit").onclick = () => { document.querySelector(".puzzle-page").classList.remove("show"); setTimeout(() => window.location.href = "categories.html", 300); };
+    document.getElementById("noQuit").onclick = () => box.remove();
+}
+function transitionBack() {
+    document.querySelector(".puzzle-page").classList.remove("show");
+    setTimeout(() => window.location.href = "categories.html", 300);
+}
+
+// ------------------------
+// FULLSCREEN BUTTON
+// ------------------------
+const fullscreenBtn = document.getElementById("fullscreenBtn");
+fullscreenBtn.addEventListener("click", () => {
+    if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+    } else {
+        document.exitFullscreen();
     }
+});
+document.addEventListener("fullscreenchange", () => {
+    if (document.fullscreenElement) fullscreenBtn.style.display = "none";
+    else fullscreenBtn.style.display = "block";
 });
 
 // ------------------------
-// PUZZLE PAGE LOGIC
+// CONFETTI
+// ------------------------
+function triggerConfetti() {
+    const canvas = document.createElement("canvas");
+    canvas.id = "confettiCanvas";
+    canvas.style.position = "absolute"; canvas.style.top = 0; canvas.style.left = 0;
+    canvas.style.width = "100%"; canvas.style.height = "100%";
+    canvas.style.pointerEvents = "none"; canvas.style.zIndex = 10;
+    const answerPopup = document.getElementById("answerPopup");
+    answerPopup.appendChild(canvas);
+    const ctx = canvas.getContext("2d");
+    const pieces = [];
+    for (let i = 0; i < 150; i++) {
+        pieces.push({ x: Math.random() * canvas.clientWidth, y: Math.random() * -50, size: 5 + Math.random() * 8, speed: 2 + Math.random() * 4 });
+    }
+    function update() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        pieces.forEach(p => {
+            p.y += p.speed;
+            ctx.fillStyle = `hsl(${Math.random() * 360},100%,50%)`;
+            ctx.fillRect(p.x, p.y, p.size, p.size);
+        });
+        requestAnimationFrame(update);
+    }
+    canvas.width = answerPopup.clientWidth;
+    canvas.height = answerPopup.clientHeight;
+    update();
+    setTimeout(() => canvas.remove(), 2500);
+}
+
+// ------------------------
+// PLAY MORE POPUP
+// ------------------------
+function showMediumPopup() {
+    document.getElementById("playMorePopup").style.display = "flex";
+}
+
+// ------------------------
+// READY POPUP + INIT
 // ------------------------
 document.addEventListener("DOMContentLoaded", () => {
-    const puzzleImage = document.getElementById("puzzleImage");
-    const hintBtn = document.getElementById("hintBtn");
-    const hintText = document.getElementById("hintText");
+    const readyPopup = document.getElementById("readyPopup");
+    const startBtn = document.getElementById("startGameBtn");
+    const quitReadyBtn = document.getElementById("quitReadyBtn");
+    const puzzlePage = document.querySelector(".puzzle-page");
 
-    if (!puzzleImage || !hintBtn || !hintText) return;
+    startBtn.addEventListener("click", () => {
+        readyPopup.style.display = "none";
+        puzzlePage.classList.add("show");
 
-    // Keep the same imagesArray you already defined in puzzle.html
-    const imagesArray = [
-        { img: "images/Brand/Easy/apple.png", answer: "Apple" },
-        { img: "images/Brand/Easy/nike.png", answer: "Nike" },
-        { img: "images/Brand/Easy/disneyland.png", answer: "Disneyland" },
-        { img: "images/Brand/Easy/starbucks.png", answer: "Starbucks" },
-        { img: "images/Brand/Easy/firefox.png", answer: "Firefox" },
-        { img: "images/Brand/Easy/twitter.png", answer: "Twitter" },
-        { img: "images/Brand/Easy/fedex.png", answer: "FedEx" },
-        { img: "images/Brand/Easy/sprite.png", answer: "Sprite" },
-        { img: "images/Brand/Easy/python.png", answer: "Python" },
-        { img: "images/Brand/Easy/oreo.png", answer: "Oreo" }
-    ];
+        // read category correctly here
+        let category = getQueryParam("category");
+        if (!category) category = "Brand Logos"; // default
+        initGame(category);
+    });
+
+    quitReadyBtn.addEventListener("click", () => { window.location.href = "categories.html"; });
+});
+
+// ------------------------
+// PUZZLE GAME LOGIC
+// ------------------------
+function initGame(category) {
+    document.getElementById("puzzleTitle").textContent = category;
+
+    const puzzleSets = {
+        "Brand Logos": [
+            { img: "images/brand_apple.png", answer: "Apple" },
+            { img: "images/brand_disneyland.png", answer: "Disneyland" },
+            { img: "images/brand_fedex.png", answer: "FedEx" }
+        ],
+        "Animals": [
+            { img: "images/bee.png", answer: "Bee" },
+            { img: "images/dog.png", answer: "Dog" },
+            { img: "images/cat.png", answer: "Cat" }
+        ]
+        // add other categories exactly matching query names...
+    };
+
+    const imagesArray = puzzleSets[category];
+    if (!imagesArray) {
+        alert("Category not found!");
+        return;
+    }
 
     let currentIndex = 0;
+    let score = 0;
+    let hintPressed = false;
+
+    const puzzleImage = document.getElementById("puzzleImage");
+    const hintBtn = document.getElementById("hintBtn");
+    const answerPopup = document.getElementById("answerPopup");
+    const scoreBox = document.getElementById("scoreBox");
+
+    const nextBtn = document.getElementById("nextImg");
+    const prevBtn = document.getElementById("prevImg");
+    const correctBtn = document.getElementById("correctBtn");
+    const wrongBtn = document.getElementById("wrongBtn");
+
+    const correctSound = new Audio("sounds/correct.mp3");
+    const wrongSound = new Audio("sounds/wrong.mp3");
+    const finishSound = new Audio("sounds/finishes.mp3");
 
     function showImage(index) {
         if (index < 0) index = 0;
         if (index >= imagesArray.length) index = imagesArray.length - 1;
         currentIndex = index;
-
         puzzleImage.src = imagesArray[currentIndex].img;
-
-        // Reset hint
-        hintText.style.display = "none";
-        hintText.textContent = "";
         hintBtn.disabled = false;
+        hintPressed = false;
+        nextBtn.disabled = true;
     }
 
-    // Navigation buttons
-    document.getElementById("nextImg")?.addEventListener("click", () => showImage(currentIndex + 1));
-    document.getElementById("prevImg")?.addEventListener("click", () => showImage(currentIndex - 1));
+    nextBtn.addEventListener("click", () => showImage(currentIndex + 1));
+    prevBtn.addEventListener("click", () => showImage(currentIndex - 1));
 
-    // Hint button
+    correctBtn.addEventListener("click", () => {
+        score++;
+        scoreBox.textContent = "Score: " + score;
+        nextBtn.disabled = false;
+        hintPressed = true;
+        if (currentIndex === imagesArray.length - 1) {
+            answerPopup.style.display = "flex";
+            answerPopup.textContent = `✔Correct!`;
+            triggerConfetti();
+            finishSound.play();
+            setTimeout(() => { answerPopup.style.display = "none"; showMediumPopup(); }, 1800);
+        } else {
+            answerPopup.style.display = "flex";
+            answerPopup.textContent = `✔Correct!`;
+            correctSound.play();
+        }
+    });
+
+    wrongBtn.addEventListener("click", () => {
+        answerPopup.style.display = "flex";
+        answerPopup.textContent = `✖ Wrong!\nTry again.`;
+        wrongSound.play();
+    });
+
     hintBtn.addEventListener("click", () => {
-        hintText.style.display = "block";
-        hintText.textContent = `Answer: ${imagesArray[currentIndex].answer}`;
         hintBtn.disabled = true;
+        hintPressed = true;
+        nextBtn.disabled = false;
+
+        answerPopup.style.display = "flex";
+        answerPopup.textContent = `Answer: ${imagesArray[currentIndex].answer}`;
+
+        if (currentIndex === imagesArray.length - 1) {
+            triggerConfetti();
+            finishSound.play();
+            setTimeout(() => { answerPopup.style.display = "none"; showMediumPopup(); }, 5000);
+        }
     });
 
-    // Show first image
+    answerPopup.addEventListener("click", () => { answerPopup.style.display = "none"; });
+
     showImage(0);
-});
-
-// ------------------------
-// CATEGORY SELECTION NAVIGATION
-// ------------------------
-const categoryButtons = document.querySelectorAll(".category-btn");
-categoryButtons.forEach(button => {
-    button.addEventListener("click", () => {
-        const selectedCategory = button.getAttribute("data-category");
-        document.body.classList.remove("show"); // fade out
-        setTimeout(() => {
-            window.location.href = `difficulty.html?category=${encodeURIComponent(selectedCategory)}`;
-        }, 300);
-    });
-});
-
-// ------------------------
-// GLOBAL QUIT FUNCTION
-// ------------------------
-function quitGame() {
-    if (document.querySelector(".quit-popup")) return; // avoid duplicates
-
-    const box = document.createElement("div");
-    box.className = "quit-popup";
-
-    // Popup styling
-    box.innerHTML = `
-        <div class="quit-dialog">
-            <p>Are you sure you want to quit?</p>
-            <div class="quit-buttons">
-                <button id="yesQuit">Yes</button>
-                <button id="noQuit">No</button>
-            </div>
-        </div>
-    `;
-
-    document.body.appendChild(box);
-
-    // YES button → fade out then go home
-    document.getElementById("yesQuit").onclick = () => {
-        document.body.classList.remove("show");
-        setTimeout(() => {
-            window.location.href = "index.html";
-        }, 300);
-    };
-
-    // NO button → closes popup
-    document.getElementById("noQuit").onclick = () => {
-        box.remove();
-    };
 }

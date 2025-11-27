@@ -1,17 +1,27 @@
+
 /* ---------- Global Styles ---------- */
 html, body {
     margin: 0;
     padding: 0;
-    height: 100%;
     width: 100%;
-    overflow: hidden;
-    background: #b40e0e;
+    min-height: 100%;
+    height: 100%;
+    overflow-x: hidden;
     font-family: 'Tempus Sans ITC', cursive;
+    background: linear-gradient(135deg, #b40e0e, #ff4d4d);
+    animation: gradientShift 15s ease-in-out infinite;
+    position: relative;
 
     /* FIX ADDED */
     display: flex;
     flex-direction: column;
     justify-content: stretch;
+}
+
+@keyframes gradientShift {
+    0% { background: linear-gradient(135deg, #b40e0e, #ff4d4d); }
+    50% { background: linear-gradient(135deg, #ff1f1f, #ff8080); }
+    100% { background: linear-gradient(135deg, #b40e0e, #ff4d4d); }
 }
 
 /* Center ONLY the welcome page */
@@ -88,4 +98,318 @@ button:hover {
 
 .quit-dialog button:hover {
     background: #7a0000;
+}
+
+/* ==== PUZZLE PAGE STYLES ==== */
+#particleCanvas {
+    position: fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.puzzle-page { 
+    opacity: 0; 
+    transition: opacity 0.3s ease-in-out; 
+    margin: 0; 
+    height: 100vh; 
+    position: relative; 
+    z-index: 1; 
+}
+
+.puzzle-page.show { opacity: 1; }
+
+.puzzle-page .puzzle-wrapper { 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    height: auto; 
+    padding: 20px; 
+    box-sizing: border-box; 
+}
+
+/* ==== TV TILE DESIGN ==== */
+.puzzle-page .puzzle-tile {
+    width: 580px; 
+    height: 380px; 
+    background: #111; 
+    border-radius: 20px; 
+    border: 8px solid #333;
+    box-shadow: 0 0 30px rgba(0,0,0,0.7), inset 0 0 30px rgba(255,255,255,0.05);
+    position: relative;
+    overflow: visible;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.puzzle-page .puzzle-tile:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 50px rgba(255, 255, 255, 0.6), inset 0 0 40px rgba(255,255,255,0.08);
+}
+
+.puzzle-page .puzzle-tile img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    padding: 0; 
+    margin: 0;
+    border-radius: 12px;
+}
+
+.puzzle-page .puzzle-tile::before {
+    content: "";
+    position: absolute;
+    top: 10%;
+    left: 10%;
+    width: 80%;
+    height: 80%;
+    border-radius: 12px;
+    background: linear-gradient(145deg, rgba(255,255,255,0.1), rgba(255,255,255,0));
+    pointer-events: none;
+}
+
+.puzzle-page .puzzle-tile::after {
+    content: "";
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 20px;
+    background: #222;
+    border-radius: 6px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+}
+
+.puzzle-page .puzzle-tile .tv-foot-left,
+.puzzle-page .puzzle-tile .tv-foot-right {
+    position: absolute;
+    bottom: -35px; 
+    width: 25px;
+    height: 15px;
+    background: #333;
+    border-radius: 3px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+    transform: rotate(-2deg);
+}
+
+.puzzle-page .puzzle-tile .tv-foot-right {
+    right: 25%;
+    transform: rotate(2deg);
+}
+
+.puzzle-page .puzzle-tile .tv-foot-left {
+    left: 25%;
+}
+
+.puzzle-page .puzzle-tile .power-led {
+    position: absolute;
+    bottom: 12px;
+    right: 16px;
+    width: 10px;
+    height: 10px;
+    background: #0f0;
+    border-radius: 50%;
+    box-shadow: 0 0 8px #0f0, 0 0 12px #0f0;
+    animation: ledPulse 1.5s infinite alternate;
+}
+
+@keyframes ledPulse {
+    0% { transform: scale(1); opacity: 0.8; }
+    100% { transform: scale(1.4); opacity: 1; }
+}
+
+/* BUTTONS, nav, popup, etc. */
+.puzzle-page .rounded-btn { 
+    background: #1f2327; 
+    color: white; 
+    border: 2px solid #00000080; 
+    padding: 8px 16px; 
+    border-radius: 10px; 
+    cursor: pointer; 
+    font-size: inherit; 
+    transition: 0.2s ease; 
+}
+
+.puzzle-page .rounded-btn:hover { 
+    background: #2b3238; 
+    transform: scale(1.05); 
+}
+
+.puzzle-page .nav-buttons { 
+    display: flex; 
+    gap: 12px; 
+    margin-top: 8px; 
+    margin-bottom: 5px; 
+    position: relative; 
+    z-index: 10; 
+    flex-wrap: wrap; 
+    justify-content: center; 
+}
+
+.puzzle-page #hintText { 
+    margin: 2px 0; 
+    min-height: 30px; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+}
+
+.puzzle-page #hintBtn { margin-top: 12px; }
+
+.puzzle-page .hint-container { 
+    height: 35px; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    margin-top: 5px; 
+}
+
+.puzzle-page #result { font-size: 1.4rem; min-height: 1.2em; text-align: center; }
+
+.puzzle-page .bottom-buttons { 
+    position: fixed; 
+    bottom: 20px; 
+    right: 20px; 
+    display: flex; 
+    flex-direction: row; 
+    gap: 10px; 
+    z-index: 2000; 
+}
+
+.puzzle-page .bottom-buttons button { 
+    padding: 6px 14px; 
+    font-size: inherit; 
+    border-radius: 6px; 
+    width: 100px; 
+}
+
+.puzzle-page .quit-popup { 
+    position: fixed; 
+    top:0; 
+    left:0; 
+    width:100%; 
+    height:100%; 
+    background: rgba(0,0,0,0.7); 
+    display:flex; 
+    justify-content:center; 
+    align-items:center; 
+    z-index: 1000; 
+}
+
+.puzzle-page .quit-dialog { 
+    background: #1f2327; 
+    padding: 30px; 
+    border-radius: 12px; 
+    text-align: center; 
+    color: white; 
+    min-width: 300px; 
+}
+
+/* MEDIUM POPUP */
+.medium-popup { 
+    position: fixed; 
+    top:0; 
+    left:0; 
+    width:100vw; 
+    height:100vh; 
+    background: rgba(0,0,0,0.65); 
+    backdrop-filter: blur(10px); 
+    -webkit-backdrop-filter: blur(10px); 
+    display:flex; 
+    justify-content:center; 
+    align-items:center; 
+    z-index:5000; 
+    color:white; 
+    font-size:clamp(2.5rem,8vw,6rem); 
+    font-weight:bold; 
+    text-shadow:3px 3px 8px black; 
+    cursor:pointer; 
+    text-align:center; 
+    white-space: pre-wrap; 
+    word-break:break-word; 
+    padding:20px; 
+    box-sizing:border-box; 
+}
+
+/* READY POPUP */
+.ready-popup { 
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100vw; 
+    height: 100vh; 
+    margin: 0; 
+    padding: 0; 
+    background: rgba(0,0,0,0.65); 
+    backdrop-filter: blur(10px); 
+    -webkit-backdrop-filter: blur(10px); 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    z-index: 5000; 
+}
+
+.ready-dialog { 
+    background: #1f2327; 
+    padding: 40px; 
+    border-radius: 12px; 
+    text-align: center; 
+    color: white; 
+}
+
+.ready-dialog p { font-size: 2rem; margin-bottom: 20px; }
+
+.ready-dialog button { 
+    font-size: 1.5rem; 
+    padding: 12px 24px; 
+    border-radius: 8px; 
+    border: none; 
+    background: #2b3238; 
+    color: white; 
+    cursor: pointer; 
+    transition: 0.2s; 
+}
+
+.ready-dialog button:hover { 
+    transform: scale(1.05); 
+    background: #3a4147; 
+}
+
+/* CORRECT / WRONG BUTTONS */
+.correct-btn, .wrong-btn { 
+    padding: 8px 12px; 
+    border-radius: 8px; 
+    border: 2px solid #00000060; 
+    cursor: pointer; 
+    font-size: 0.95rem; 
+}
+
+.correct-btn { background: #1f7a1f; color: white; }
+.correct-btn:hover { transform: scale(1.03); }
+
+.wrong-btn { background: #7a1f1f; color: white; }
+.wrong-btn:hover { transform: scale(1.03); }
+
+/* FULLSCREEN BUTTON */
+#fullscreenBtn {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 7000;
+    background: transparent;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 8px 14px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+#fullscreenBtn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: scale(1.05);
 }
