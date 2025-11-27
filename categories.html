@@ -10,7 +10,7 @@
 /* ---------- Categories Page CSS ---------- */
 
 body {
-    background: #b40e0e; /* red background to match puzzle page */
+    background: #b40e0e;
     opacity: 0;
     transition: opacity 0.5s ease-in-out;
 }
@@ -20,31 +20,41 @@ body.show {
 
 .topics {
     height: 100vh;
+    width: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: space-between; /* FIXED */
     align-items: center;
     text-align: center;
-    padding: 50px 20px 40px 20px;
+    padding: 40px 20px 20px 20px; /* FIXED */
 }
 
+/* Title */
 .topics h1 {
-    margin-bottom: 60px;
+    margin: 0;
+    margin-bottom: 20px;
     font-size: 3rem;
     color: white;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
 }
 
+/* Wrapper added to fix vertical alignment */
+.topic-wrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
 /* Tiles Grid */
 .topic-buttons {
     display: grid;
-    grid-template-columns: repeat(3, 350px);
-    grid-auto-rows: 230px;
-    gap: 40px 60px;
+    grid-template-columns: repeat(3, 280px); /* smaller than 350px */
+    grid-auto-rows: 180px; /* smaller than 230px */
+    gap: 30px 50px; /* slightly smaller gaps for balance */
     justify-content: center;
 }
 
-/* Each Tile (Button) */
+/* Each Tile */
 .topic-buttons button {
     width: 100%;
     height: 100%;
@@ -58,7 +68,7 @@ body.show {
     justify-content: flex-end;
     align-items: center;
 
-    padding: 10px;
+    padding: 8px; /* slightly less padding */
     transition: 0.3s ease;
     color: white;
     position: relative;
@@ -67,32 +77,34 @@ body.show {
 /* Tile Images */
 .topic-buttons button img {
     width: 100%;
-    height: 160px;
+    height: 120px; /* smaller than 160px */
     object-fit: cover;
     border-radius: 10px;
-    margin-bottom: 15px;
+    margin-bottom: 10px; /* smaller spacing under image */
 }
 
 /* Tile Text */
 .topic-buttons button span {
-    font-size: 1.6rem;
-    font-weight: bold;
-    color: #fff;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
-    text-align: center;
-    font-family: 'Tempus Sans ITC', cursive;
+    font-size: 1.4rem; /* slightly smaller text */
 }
 
-/* Tile Hover */
+/* Hover */
 .topic-buttons button:hover {
     background: #071d36;
     transform: scale(1.06);
     box-shadow: 0 6px 15px rgba(0,0,0,0.35);
 }
 
-/* Back & Quit Buttons */
-button.back-btn,
-button.start-btn {
+/* Bottom Buttons */
+.bottom-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    padding-bottom: 10px;
+}
+
+/* Back & Quit */
+button.back-btn {
     padding: 10px 20px;
     border: none;
     border-radius: 8px;
@@ -101,21 +113,10 @@ button.start-btn {
     cursor: pointer;
     font-size: 1.5rem;
 }
-
-button.back-btn:hover,
-button.start-btn:hover {
+button.back-btn:hover {
     background: #071d36;
 }
 
-/* Bottom Buttons Container */
-.bottom-buttons {
-    display: flex;
-    gap: 20px;
-    justify-content: center;
-    margin-top: 60px;
-}
-
-/* Quit Button */
 button.quit-btn {
     padding: 10px 20px;
     border: none;
@@ -125,7 +126,6 @@ button.quit-btn {
     cursor: pointer;
     font-size: 1.5rem;
 }
-
 button.quit-btn:hover {
     background: #5c0000;
 }
@@ -136,31 +136,33 @@ button.quit-btn:hover {
 <div class="topics" id="topicSelection">
     <h1>Choose a Puzzle Topic</h1>
 
-    <div class="topic-buttons">
-        <button class="category-btn" data-category="Brand Logos">
-            <img src="images/brand.png" alt="Brand Logos" class="topic-img">
-            <span>Brand</span>
-        </button>
-        <button class="category-btn" data-category="Movies">
-            <img src="images/movie.png" alt="Movies" class="topic-img">
-            <span>Movies</span>
-        </button>
-        <button class="category-btn" data-category="Music">
-            <img src="images/music.png" alt="Music" class="topic-img">
-            <span>Music</span>
-        </button>
-        <button class="category-btn" data-category="Idioms">
-            <img src="images/idioms.png" alt="Idioms" class="topic-img">
-            <span>Idioms</span>
-        </button>
-        <button class="category-btn" data-category="Animals">
-            <img src="images/animals.png" alt="Animals" class="topic-img">
-            <span>Animals</span>
-        </button>
-        <button class="category-btn" data-category="Food">
-            <img src="images/food.png" alt="Food" class="topic-img">
-            <span>Food</span>
-        </button>
+    <div class="topic-wrapper">
+        <div class="topic-buttons">
+            <button class="category-btn" data-category="Brand Logos">
+                <img src="images/brand.png" alt="Brand Logos">
+                <span>Brand</span>
+            </button>
+            <button class="category-btn" data-category="Movies">
+                <img src="images/movie.png" alt="Movies">
+                <span>Movies</span>
+            </button>
+            <button class="category-btn" data-category="Music">
+                <img src="images/music.png" alt="Music">
+                <span>Music</span>
+            </button>
+            <button class="category-btn" data-category="Idioms">
+                <img src="images/idioms.png" alt="Idioms">
+                <span>Idioms</span>
+            </button>
+            <button class="category-btn" data-category="Animals">
+                <img src="images/animals.png" alt="Animals">
+                <span>Animals</span>
+            </button>
+            <button class="category-btn" data-category="Food">
+                <img src="images/food.png" alt="Food">
+                <span>Food</span>
+            </button>
+        </div>
     </div>
 
     <div class="bottom-buttons">
@@ -179,7 +181,6 @@ document.addEventListener("DOMContentLoaded", () => {
             const category = button.dataset.category;
             document.body.classList.remove("show");
             setTimeout(() => {
-                // Directly open puzzle.html and pass category
                 window.location.href = `puzzle.html?category=${encodeURIComponent(category)}`;
             }, 300);
         });
@@ -192,17 +193,20 @@ function transitionBack() {
 }
 
 function quitGame() {
-    if(document.querySelector(".quit-popup")) return;
+    if (document.querySelector(".quit-popup")) return;
+
     const box = document.createElement("div");
     box.className = "quit-popup";
-    box.innerHTML = `<div class="quit-dialog">
-        <p>Are you sure you want to quit?</p>
-        <div class="quit-buttons">
-            <button id="yesQuit">Yes</button>
-            <button id="noQuit">No</button>
-        </div>
-    </div>`;
+    box.innerHTML = `
+        <div class="quit-dialog">
+            <p>Are you sure you want to quit?</p>
+            <div class="quit-buttons">
+                <button id="yesQuit">Yes</button>
+                <button id="noQuit">No</button>
+            </div>
+        </div>`;
     document.body.appendChild(box);
+
     document.getElementById("yesQuit").onclick = () => { window.location.href = "index.html"; };
     document.getElementById("noQuit").onclick = () => box.remove();
 }
