@@ -38,22 +38,100 @@ html, body {
 .puzzle-page { opacity: 0; transition: opacity 0.3s ease-in-out; margin: 0; height: 100vh; position: relative; z-index: 1; }
 .puzzle-page.show { opacity: 1; }
 .puzzle-page .puzzle-wrapper { display: flex; flex-direction: column; align-items: center; height: auto; padding: 20px; box-sizing: border-box; }
-.puzzle-page .puzzle-tile { 
+
+/* ==== TV TILE DESIGN ==== */
+.puzzle-page .puzzle-tile {
     width: 580px; 
     height: 380px; 
-    background: #0d2236; 
-    border-radius: 12px; 
-    border: 4px solid #00000040; 
-    overflow: hidden; 
-    padding: 0; 
-    box-shadow: 0 0 25px rgba(255, 255, 255, 0.4);
+    background: #111; 
+    border-radius: 20px; 
+    border: 8px solid #333;
+    box-shadow: 0 0 30px rgba(0,0,0,0.7), inset 0 0 30px rgba(255,255,255,0.05);
+    position: relative;
+    overflow: visible; /* allow feet to show */
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 .puzzle-page .puzzle-tile:hover {
     transform: scale(1.02);
-    box-shadow: 0 0 40px rgba(255, 255, 255, 0.6);
+    box-shadow: 0 0 50px rgba(255, 255, 255, 0.6), inset 0 0 40px rgba(255,255,255,0.08);
 }
-.puzzle-page .puzzle-tile img { width: 100%; height: 100%; object-fit: cover; padding: 0; margin: 0; }
+
+/* SCREEN IMAGE */
+.puzzle-page .puzzle-tile img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    padding: 0; 
+    margin: 0;
+    border-radius: 12px;
+}
+
+/* GLARE ON TV */
+.puzzle-page .puzzle-tile::before {
+    content: "";
+    position: absolute;
+    top: 10%;
+    left: 10%;
+    width: 80%;
+    height: 80%;
+    border-radius: 12px;
+    background: linear-gradient(145deg, rgba(255,255,255,0.1), rgba(255,255,255,0));
+    pointer-events: none;
+}
+
+/* TV STAND */
+.puzzle-page .puzzle-tile::after {
+    content: "";
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 20px;
+    background: #222;
+    border-radius: 6px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+}
+
+/* RETRO TV FEET */
+.puzzle-page .puzzle-tile .tv-foot-left,
+.puzzle-page .puzzle-tile .tv-foot-right {
+    position: absolute;
+    bottom: -35px; 
+    width: 25px;
+    height: 15px;
+    background: #333;
+    border-radius: 3px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+    transform: rotate(-2deg);
+}
+.puzzle-page .puzzle-tile .tv-foot-right {
+    right: 25%;
+    transform: rotate(2deg);
+}
+.puzzle-page .puzzle-tile .tv-foot-left {
+    left: 25%;
+}
+
+/* POWER LED */
+.puzzle-page .puzzle-tile .power-led {
+    position: absolute;
+    bottom: 12px;
+    right: 16px;
+    width: 10px;
+    height: 10px;
+    background: #0f0;
+    border-radius: 50%;
+    box-shadow: 0 0 8px #0f0, 0 0 12px #0f0;
+    animation: ledPulse 1.5s infinite alternate;
+}
+
+@keyframes ledPulse {
+    0% { transform: scale(1); opacity: 0.8; }
+    100% { transform: scale(1.4); opacity: 1; }
+}
+
+/* BUTTONS, nav, popup, etc. remain unchanged */
 .puzzle-page .rounded-btn { background: #1f2327; color: white; border: 2px solid #00000080; padding: 8px 16px; border-radius: 10px; cursor: pointer; font-size: inherit; transition: 0.2s ease; }
 .puzzle-page .rounded-btn:hover { background: #2b3238; transform: scale(1.05); }
 .puzzle-page .nav-buttons { display: flex; gap: 12px; margin-top: 8px; margin-bottom: 5px; position: relative; z-index: 10; flex-wrap: wrap; justify-content: center; }
@@ -66,101 +144,21 @@ html, body {
 .puzzle-page .quit-popup { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.7); display:flex; justify-content:center; align-items:center; z-index: 1000; }
 .puzzle-page .quit-dialog { background: #1f2327; padding: 30px; border-radius: 12px; text-align: center; color: white; min-width: 300px; }
 
-.medium-popup {
-    position: fixed;
-    top:0;
-    left:0;
-    width:100vw;
-    height:100vh;
-    background: rgba(0,0,0,0.65);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    z-index:5000;
-    color:white;
-    font-size:clamp(2.5rem,8vw,6rem);
-    font-weight:bold;
-    text-shadow:3px 3px 8px black;
-    cursor:pointer;
-    text-align:center;
-    white-space: pre-wrap;
-    word-break:break-word;
-    padding:20px;
-    box-sizing:border-box;
-}
+.medium-popup { position: fixed; top:0; left:0; width:100vw; height:100vh; background: rgba(0,0,0,0.65); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); display:flex; justify-content:center; align-items:center; z-index:5000; color:white; font-size:clamp(2.5rem,8vw,6rem); font-weight:bold; text-shadow:3px 3px 8px black; cursor:pointer; text-align:center; white-space: pre-wrap; word-break:break-word; padding:20px; box-sizing:border-box; }
 
-.ready-popup {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    margin: 0;
-    padding: 0;
-    background: rgba(0,0,0,0.65);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 5000;
-}
+.ready-popup { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; margin: 0; padding: 0; background: rgba(0,0,0,0.65); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); display: flex; justify-content: center; align-items: center; z-index: 5000; }
 
-.ready-dialog {
-    background: #1f2327;
-    padding: 40px;
-    border-radius: 12px;
-    text-align: center;
-    color: white;
-}
+.ready-dialog { background: #1f2327; padding: 40px; border-radius: 12px; text-align: center; color: white; }
 
-.ready-dialog p {
-    font-size: 2rem;
-    margin-bottom: 20px;
-}
+.ready-dialog p { font-size: 2rem; margin-bottom: 20px; }
 
-.ready-dialog button {
-    font-size: 1.5rem;
-    padding: 12px 24px;
-    border-radius: 8px;
-    border: none;
-    background: #2b3238;
-    color: white;
-    cursor: pointer;
-    transition: 0.2s;
-}
+.ready-dialog button { font-size: 1.5rem; padding: 12px 24px; border-radius: 8px; border: none; background: #2b3238; color: white; cursor: pointer; transition: 0.2s; }
 
-.ready-dialog button:hover {
-    transform: scale(1.05);
-    background: #3a4147;
-}
+.ready-dialog button:hover { transform: scale(1.05); background: #3a4147; }
 
-#scoreBox {
-    position: fixed;
-    top: 16px;
-    right: 20px;
-    padding: 10px 14px;
-    background: #1f2327;
-    color: #fff;
-    border-radius: 8px;
-    border: 2px solid #00000080;
-    font-size: 1.05rem;
-    z-index: 6000;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-    min-width: 96px;
-    text-align: center;
-    transition: transform 0.2s ease;
-}
+#scoreBox { position: fixed; top: 16px; right: 20px; padding: 10px 14px; background: #1f2327; color: #fff; border-radius: 8px; border: 2px solid #00000080; font-size: 1.05rem; z-index: 6000; box-shadow: 0 4px 12px rgba(0,0,0,0.4); min-width: 96px; text-align: center; transition: transform 0.2s ease; }
 
-.correct-btn, .wrong-btn {
-    padding: 8px 12px;
-    border-radius: 8px;
-    border: 2px solid #00000060;
-    cursor: pointer;
-    font-size: 0.95rem;
-}
+.correct-btn, .wrong-btn { padding: 8px 12px; border-radius: 8px; border: 2px solid #00000060; cursor: pointer; font-size: 0.95rem; }
 .correct-btn { background: #1f7a1f; color: white; }
 .correct-btn:hover { transform: scale(1.03); }
 .wrong-btn { background: #7a1f1f; color: white; }
@@ -191,6 +189,9 @@ html, body {
 
     <div class="puzzle-tile">
         <img id="puzzleImage" src="" alt="Rebus Image">
+        <div class="power-led"></div>
+        <div class="tv-foot-left"></div>
+        <div class="tv-foot-right"></div>
     </div>
 
     <div class="nav-buttons">
@@ -220,19 +221,14 @@ html, body {
 </div>
 
 <script>
-/* ================== PARTICLE BACKGROUND ================== */
+// PARTICLES
 const canvas = document.getElementById("particleCanvas");
 const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 const particles = [];
 for(let i=0;i<120;i++){
-    particles.push({
-        x: Math.random()*canvas.width,
-        y: Math.random()*canvas.height,
-        r: 1+Math.random()*3,
-        d: Math.random()*1
-    });
+    particles.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, r: 1+Math.random()*3, d: Math.random()*1 });
 }
 function drawParticles(){
     ctx.clearRect(0,0,canvas.width,canvas.height);
@@ -248,12 +244,12 @@ function drawParticles(){
 }
 drawParticles();
 
-/* ================== EXISTING GAME JS ================== */
+// GET QUERY PARAM
 function getQueryParam(param) {
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get(param);
+    return new URLSearchParams(window.location.search).get(param);
 }
 
+// QUIT / BACK
 function quitGame() {
     if(document.querySelector(".quit-popup")) return;
     const box = document.createElement("div");
@@ -275,6 +271,7 @@ function transitionBack() {
     setTimeout(() => window.location.href="categories.html", 300);
 }
 
+// CONFETTI
 function triggerConfetti() {
     const canvas = document.createElement("canvas");
     canvas.id = "confettiCanvas";
@@ -290,6 +287,7 @@ function triggerConfetti() {
     setTimeout(()=>canvas.remove(),2500);
 }
 
+// MEDIUM POPUP
 function showMediumPopup() {
     const pop = document.createElement("div");
     pop.className = "medium-popup";
@@ -307,6 +305,7 @@ function showMediumPopup() {
     document.getElementById("quitBtn").onclick = () => window.location.href = "index.html";
 }
 
+// READY POPUP
 document.addEventListener("DOMContentLoaded",()=>{
     const readyPopup = document.getElementById("readyPopup");
     const startBtn = document.getElementById("startGameBtn");
@@ -322,6 +321,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     quitReadyBtn.addEventListener("click", ()=>{ window.location.href = "categories.html"; });
 });
 
+// INIT GAME
 function initGame(){
     const category = getQueryParam("category") || "Brand Logos";
     document.getElementById("puzzleTitle").textContent = category;
@@ -330,172 +330,23 @@ function initGame(){
         "Brand Logos": [
             { img:"images/brand_apple.png", answer:"Apple" },
             { img:"images/brand_disneyland.png", answer:"Disneyland" },
-                        { img:"images/brand_fedex.png", answer:"FedEx" },
-            { img:"images/brand_firefox.png", answer:"Firefox" },
-            { img:"images/brand_nike.png", answer:"Nike" },
-            { img:"images/brand_oreo.png", answer:"Oreo" },
-            { img:"images/brand_python.png", answer:"Python" },
-            { img:"images/brand_sprite.png", answer:"Sprite" },
-            { img:"images/brand_starbucks.png", answer:"Starbucks" },
-            { img:"images/brand_twitter.png", answer:"Twitter" },
-            { img:"images/brand_facebook.png", answer:"Facebook" },
-            { img:"images/brand_lego.png", answer:"Lego" },
-            { img:"images/brand_paypal.png", answer:"PayPal" },
-            { img:"images/brand_pepsi.png", answer:"Pepsi" },
-            { img:"images/brand_pinterest.png", answer:"Pinterest" },
-            { img:"images/brand_redbull.png", answer:"RedBull" },
-            { img:"images/brand_samsung.png", answer:"Samsung" },
-            { img:"images/brand_shell.png", answer:"Shell" },
-            { img:"images/brand_snapchat.png", answer:"Snapchat" },
-            { img:"images/brand_subway.png", answer:"Subway" },
-            { img:"images/brand_fujifilm.png", answer:"Fujifilm" },
-            { img:"images/brand_rolex.png", answer:"Rolex" },
-            { img:"images/brand_intel.png", answer:"Intel" },
-            { img:"images/brand_cornetto.png", answer:"Cornetto" },
-            { img:"images/brand_drpepper.png", answer:"Dr Pepper" },
-            { img:"images/brand_lamborgini.png", answer:"Lamborghini" },
-            { img:"images/brand_microsoft.png", answer:"Microsoft" },
-            { img:"images/brand_lipton.png", answer:"Lipton" },
-            { img:"images/brand_mitsubishi.png", answer:"Mitsubishi" },
-            { img:"images/brand_hermes.png", answer:"Hermès" }
-        ],
-
-        "Movies": [
-            { img:"images/ghost_rider.png", answer:"Ghost Rider" },
-            { img:"images/bee_movie.png", answer:"Bee Movie" },
-            { img:"images/lion_king.png", answer:"Lion King" },
-            { img:"images/spider_man.png", answer:"Spider Man" },
-            { img:"images/ant_man.png", answer:"Ant Man" },
-            { img:"images/king_of_speech.png", answer:"King Of Speech" },
-            { img:"images/car_2.png", answer:"Car 2" },
-            { img:"images/girl_in_the_next_door.png", answer:"Girl In The Next Door" },
-            { img:"images/rocket_man.png", answer:"Rocket Man" },
-            { img:"images/ice_man.png", answer:"Ice Man" },
-            { img:"images/ghost_call.png", answer:"Ghost Call" },
-            { img:"images/back_to_future.png", answer:"Back To Future" },
-            { img:"images/karate_kid.png", answer:"Karate Kid" },
-            { img:"images/a_beautiful_mind.png", answer:"A Beautiful Mind" },
-            { img:"images/social_web.png", answer:"Social Web" },
-            { img:"images/she_is_gone.png", answer:"She Is Gone" },
-            { img:"images/iniside_out.png", answer:"Iniside Out" },
-            { img:"images/no_county_for_oldman.png", answer:"No County For Oldman" },
-            { img:"images/parasite.png", answer:"Parasite" },
-            { img:"images/blade_runner.png", answer:"Blade Runner" },
-            { img:"images/pirate_adventure.png", answer:"Pirate Adventure" },
-            { img:"images/she's_reading_part_2.png", answer:"She's Reading Part 2" },
-            { img:"images/7_king_speech.png", answer:"7 King Speech" },
-            { img:"images/rocketman_to_star.png", answer:"Rocketman To Star" },
-            { img:"images/charlie_chocolate_factory.png", answer:"Charlie Chocolate Factory" },
-            { img:"images/seven_ghost_in_the_house.png", answer:"Seven Ghost In The House" },
-            { img:"images/eye_love_alien.png", answer:"Eye Love Alien" },
-            { img:"images/3_alien_in_the_space.png", answer:"3 Alien In The Space" },
-            { img:"images/eye_love_small.png", answer:"Eye Love Small" },
-            { img:"images/now_you_see_me.png", answer:"Now You See Me" }
-
-        ],
-        "Idioms": [
-            { img:"images/walking_on_eggshells.png", answer:"Walking on Eggshells" },
-            { img:"images/a_bright_idea.png", answer:"A Bright Idea" },
-            { img:"images/butter_someone_up.png", answer:"Butter Someone Up" },
-            { img:"images/breadwinner.png", answer:"Breadwinner" },
-            { img:"images/time_to_sleep.png", answer:"Time to Sleep" },
-            { img:"images/brainstorm.png", answer:"Brainstorm" },
-            { img:"images/belief.png", answer:"Belief" },
-            { img:"images/firehouse.png", answer:"Firehouse" },
-            { img:"images/icebox.png", answer:"Icebox" },
-            { img:"images/follow_your_heart.png", answer:"Follow Your Heart" },
-            { img:"images/elephant_in_the_room.png", answer:"Elephant in the Room" },
-            { img:"images/it's_raining_cats_and_dogs.png", answer:"It's Raining Cats and Dogs" },
-            { img:"images/don't_let_the_bedbugs_bite.png", answer:"Don't Let the Bedbugs Bite" },
-            { img:"images/break_the_ice.png", answer:"Break the Ice" },
-            { img:"images/hit_the_hay.png", answer:"Hit the Hay" },
-            { img:"images/time_heals_all_wounds.png", answer:"Time Heals All Wounds" },
-            { img:"images/playing_with_fire.png", answer:"Playing with Fire" },
-            { img:"images/apple_of_my_eye.png", answer:"Apple of My Eye" },
-            { img:"images/think_outside_the_box.png", answer:"Think Outside the Box" },
-            { img:"images/knock_on_wood.png", answer:"Knock on Wood" },
-            { img:"images/world_without_end.png", answer:"World Without End" },
-            { img:"images/running_out_of_time.png", answer:"Running Out of Time" },
-            { img:"images/hotter_than_the_bed.png", answer:"Hotter Than the Bed" },
-            { img:"images/irrelevant.png", answer:"Irrelevant" },
-            { img:"images/cancel_the_plan.png", answer:"Cancel the Plan" },
-            { img:"images/a_quick_word.png", answer:"A Quick Word" },
-            { img:"images/think_twice.png", answer:"Think Twice" },
-            { img:"images/mismatch.png", answer:"Mismatch" },
-            { img:"images/twisted_reflection.png", answer:"Twisted Reflection" },
-            { img:"images/speechless.png", answer:"Speechless" }
-        ],
-        "Animals": [
-            { img: "images/bee.png", answer: "Bee" },
-            { img: "images/bird.png", answer: "Bird" },
-            { img: "images/monkey.png", answer: "Monkey" },
-            { img: "images/dog.png", answer: "Dog" },
-            { img: "images/cat.png", answer: "Cat" },
-            { img: "images/pig.png", answer: "Pig" },
-            { img: "images/rabbit.png", answer: "Rabbit" },
-            { img: "images/king_cobra.png", answer: "King Cobra" },
-            { img: "images/cow.png", answer: "Cow" },
-            { img: "images/butterfly.png", answer: "Butterfly" },
-            { img: "images/electric_eel.png", answer: "Electric Eel" },
-            { img: "images/two_legs.png", answer: "Two Legs" },
-            { img: "images/panda_bear.png", answer: "Panda Bear" },
-            { img: "images/poisonous_snake.png", answer: "Poisonous Snakes" },
-            { img: "images/eagle.png", answer: "Eagle" },
-            { img: "images/love_birds.png", answer: "Love Birds" },
-            { img: "images/goat.png", answer: "Goat" },
-            { img: "images/mammals.png", answer: "Mammals" },
-            { img: "images/reptiles.png", answer: "Reptiles" },
-            { img: "images/insects.png", answer: "Insects" },
-
-        ],
-        "Sports": [
-            { img: "images/marathon.png", answer: "Marathon" },
-            { img: "images/soccer.png", answer: "Soccer" },
-            { img: "images/basketball.png", answer: "Basketball" },
-            { img: "images/tennis.png", answer: "Tennis" },
-            { img: "images/swimming.png", answer: "Swimming" },
-            { img: "images/boxing.png", answer: "Boxing" },
-            { img: "images/golf.png", answer: "Golf" },
-            { img: "images/ice_hockey.png", answer: "Ice Hockey" },
-            { img: "images/archery.png", answer: "Archery" },
-            { img: "images/rock_climbing.png", answer: "Rock Climbing" },
-            { img: "images/downhill_skiing.png", answer: "Downhill Skiing" },
-            { img: "images/fishing.png", answer: "Fishing" },
-            { img: "images/longboard_surfing.png", answer: "Longboard Surfing" },
-            { img: "images/100_meter_sprint.png", answer: "100 Meter Sprint" },
-            { img: "images/weightlifting.png", answer: "Weightlifting" },
-            { img: "images/road_cycling.png", answer: "Road Cycling" },
-            { img: "images/fencing.png", answer: "Fencing" },
-            { img: "images/water_volleyball.png", answer: "Water Volleyball" },
-            { img: "images/gymnastics.png", answer: "Gymnastics" },
-            { img: "images/hurdles.png", answer: "Hurdles" },
-            { img: "images/ice_curling.png", answer: "Ice Curling" },
-            { img: "images/track_relay.png", answer: "Track Relay" },
-            { img: "images/long_jump.png", answer: "Long Jump" },
-            { img: "images/equestrian_target.png", answer: "Equestrian Target" },
-            { img: "images/kickboxing.png", answer: "Kickboxing" },
-            { img: "images/karate.png", answer: "Karate" },
-            { img: "images/judo.png", answer: "Judo" },
-            { img: "images/sepak_takraw.png", answer: "Sepak Takraw" },
-            { img: "images/cricket.png", answer: "Cricket" },
-            { img: "images/sumo_wrestling.png", answer: "Sumo Wrestling" },
-        ],
-        "Food": [
-            { img:"images/movie_avengers.png", answer:"Avengers" },
-
         ]
-
     };
 
     const imagesArray = puzzleSets[category];
     let currentIndex = 0;
     let score = 0;
+    let hintPressed = false;
 
     const puzzleImage = document.getElementById("puzzleImage");
     const hintBtn = document.getElementById("hintBtn");
-    const hintText = document.getElementById("hintText");
     const answerPopup = document.getElementById("answerPopup");
     const scoreBox = document.getElementById("scoreBox");
+
+    const nextBtn = document.getElementById("nextImg");
+    const prevBtn = document.getElementById("prevImg");
+    const correctBtn = document.getElementById("correctBtn");
+    const wrongBtn = document.getElementById("wrongBtn");
 
     const correctSound = new Audio("sounds/correct.mp3");
     const wrongSound = new Audio("sounds/wrong.mp3");
@@ -506,37 +357,32 @@ function initGame(){
         if(index>=imagesArray.length) index=imagesArray.length-1;
         currentIndex=index;
         puzzleImage.src = imagesArray[currentIndex].img;
-        hintText.style.display="none";
-        hintText.textContent="";
         hintBtn.disabled=false;
+        hintPressed=false;
+        nextBtn.disabled = true;      // disable Next until hint pressed
     }
 
-    document.getElementById("nextImg").addEventListener("click",()=>showImage(currentIndex+1));
-    document.getElementById("prevImg").addEventListener("click",()=>showImage(currentIndex-1));
+    nextBtn.addEventListener("click",()=>showImage(currentIndex+1));
+    prevBtn.addEventListener("click",()=>showImage(currentIndex-1));
 
-    document.getElementById("correctBtn").addEventListener("click", () => {
+    correctBtn.addEventListener("click", () => {
         score++;
         scoreBox.textContent = "Score: " + score;
 
         if(currentIndex === imagesArray.length -1){
-            // LAST PUZZLE
             answerPopup.style.display = "flex";
             answerPopup.textContent = `🎉 ✔ Correct!\nPoints: ${score}`;
             triggerConfetti();
-            finishSound.play(); // FINISH sound
-            setTimeout(()=>{
-                answerPopup.style.display="none"; 
-                showMediumPopup(); 
-            }, 1800);
+            finishSound.play();
+            setTimeout(()=>{ answerPopup.style.display="none"; showMediumPopup(); }, 1800);
         } else {
-            // NORMAL PUZZLE
             answerPopup.style.display = "flex";
             answerPopup.textContent = `🎉 ✔ Correct!\nPoints: ${score}`;
-            correctSound.play(); // normal correct sound
+            correctSound.play();
         }
     });
 
-    document.getElementById("wrongBtn").addEventListener("click", () => {
+    wrongBtn.addEventListener("click", () => {
         answerPopup.style.display = "flex";
         answerPopup.textContent = `✖ Wrong! Try again.`;
         wrongSound.play();
@@ -544,11 +390,15 @@ function initGame(){
 
     hintBtn.addEventListener("click",()=>{
         hintBtn.disabled=true;
+        hintPressed=true;
+        nextBtn.disabled = false;
+
         answerPopup.style.display = "flex";
         answerPopup.textContent = `Answer: ${imagesArray[currentIndex].answer}`;
+
         if(currentIndex===imagesArray.length-1){
             triggerConfetti();
-            finishSound.play(); // FINISH sound
+            finishSound.play();
             setTimeout(()=>{ answerPopup.style.display="none"; showMediumPopup(); },1800);
         }
     });
@@ -558,5 +408,3 @@ function initGame(){
     showImage(0);
 }
 </script>
-</body>
-</html>
