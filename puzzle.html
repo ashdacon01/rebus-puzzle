@@ -199,40 +199,97 @@ function initGame(){
     const category = getQueryParam("category") || "Brand Logos";
     document.getElementById("puzzleTitle").textContent = category;
 
-    const imagesArray = [
-        { img:"images/brand_apple.png", answer:"Apple" },
-    { img:"images/brand_disneyland.png", answer:"Disneyland" },
-    { img:"images/brand_fedex.png", answer:"FedEx" },
-    { img:"images/brand_firefox.png", answer:"Firefox" },
-    { img:"images/brand_nike.png", answer:"Nike" },
-    { img:"images/brand_oreo.png", answer:"Oreo" },
-    { img:"images/brand_python.png", answer:"Python" },
-    { img:"images/brand_sprite.png", answer:"Sprite" },
-    { img:"images/brand_starbucks.png", answer:"Starbucks" },
-    { img:"images/brand_twitter.png", answer:"Twitter" },
-    { img:"images/brand_facebook.png", answer:"Facebook" },
-    { img:"images/brand_lego.png", answer:"Lego" },
-    { img:"images/brand_paypal.png", answer:"PayPal" },
-    { img:"images/brand_pepsi.png", answer:"Pepsi" },
-    { img:"images/brand_pinterest.png", answer:"Pinterest" },
-    { img:"images/brand_redbull.png", answer:"RedBull" },
-    { img:"images/brand_samsung.png", answer:"Samsung" },
-    { img:"images/brand_shell.png", answer:"Shell" },
-    { img:"images/brand_snapchat.png", answer:"Snapchat" },
-    { img:"images/brand_subway.png", answer:"Subway" },
-    { img:"images/brand_fujifilm.png", answer:"Fujifilm" },
-    { img:"images/brand_rolex.png", answer:"Rolex" },
-    { img:"images/brand_intel.png", answer:"Intel" },
-    { img:"images/brand_cornetto.png", answer:"Cornetto" },
-    { img:"images/brand_drpepper.png", answer:"Dr. Pepper" },
-    { img:"images/brand_lamborgini.png", answer:"Lamborghini" },
-    { img:"images/brand_microsoft.png", answer:"Microsoft" },
-    { img:"images/brand_lipton.png", answer:"Lipton" },
-    { img:"images/brand_mitsubishi.png", answer:"Mitsubishi" },
-    { img:"images/brand_hermes.png", answer:"Hermès" }
-    ];
+    const puzzleSets = {
 
-    let currentIndex=0;
+        /* ----------------------
+           BRAND LOGOS (original)
+        -----------------------*/
+        "Brand Logos": [
+            { img:"images/brand_apple.png", answer:"Apple" },
+            { img:"images/brand_disneyland.png", answer:"Disneyland" },
+            { img:"images/brand_fedex.png", answer:"FedEx" },
+            { img:"images/brand_firefox.png", answer:"Firefox" },
+            { img:"images/brand_nike.png", answer:"Nike" },
+            { img:"images/brand_oreo.png", answer:"Oreo" },
+            { img:"images/brand_python.png", answer:"Python" },
+            { img:"images/brand_sprite.png", answer:"Sprite" },
+            { img:"images/brand_starbucks.png", answer:"Starbucks" },
+            { img:"images/brand_twitter.png", answer:"Twitter" },
+            { img:"images/brand_facebook.png", answer:"Facebook" },
+            { img:"images/brand_lego.png", answer:"Lego" },
+            { img:"images/brand_paypal.png", answer:"PayPal" },
+            { img:"images/brand_pepsi.png", answer:"Pepsi" },
+            { img:"images/brand_pinterest.png", answer:"Pinterest" },
+            { img:"images/brand_redbull.png", answer:"RedBull" },
+            { img:"images/brand_samsung.png", answer:"Samsung" },
+            { img:"images/brand_shell.png", answer:"Shell" },
+            { img:"images/brand_snapchat.png", answer:"Snapchat" },
+            { img:"images/brand_subway.png", answer:"Subway" },
+            { img:"images/brand_fujifilm.png", answer:"Fujifilm" },
+            { img:"images/brand_rolex.png", answer:"Rolex" },
+            { img:"images/brand_intel.png", answer:"Intel" },
+            { img:"images/brand_cornetto.png", answer:"Cornetto" },
+            { img:"images/brand_drpepper.png", answer:"Dr Pepper" },
+            { img:"images/brand_lamborgini.png", answer:"Lamborghini" },
+            { img:"images/brand_microsoft.png", answer:"Microsoft" },
+            { img:"images/brand_lipton.png", answer:"Lipton" },
+            { img:"images/brand_mitsubishi.png", answer:"Mitsubishi" },
+            { img:"images/brand_hermes.png", answer:"Hermès" }
+        ],
+
+        "Movies": [
+            { img:"images/ghost_rider.png", answer:"Ghost Rider" },
+            { img:"images/bee_movie.png", answer:"Bee Movie" },
+            { img:"images/lion_king.png", answer:"Lion King" },
+            { img:"images/spider_man.png", answer:"Spider Man" },
+            { img:"images/ant_man.png", answer:"Ant Man" },
+            { img:"images/king_of_speech.png", answer:"King Of Speech" },
+            { img:"images/car_2.png", answer:"Car 2" },
+            { img:"images/girl_in_the_next_door.png", answer:"Girl In The Next Door" },
+            { img:"images/rocket_man.png", answer:"Rocket Man" },
+            { img:"images/ice_man.png", answer:"Ice Man" },
+
+            { img:"images/ghost_call.png", answer:"Ghost Call" },
+            { img:"images/back_to_future.png", answer:"Back To Future" },
+            { img:"images/karate_kid.png", answer:"Karate Kid" },
+            { img:"images/a_beautiful_mind.png", answer:"A Beautiful Mind" },
+            { img:"images/social_web.png", answer:"Social Web" },
+            { img:"images/she_is_gone.png", answer:"She Is Gone" },
+            { img:"images/iniside_out.png", answer:"Iniside Out" },
+            { img:"images/no_county_for_oldman.png", answer:"No County For Oldman" },
+            { img:"images/parasite.png", answer:"Parasite" },
+            { img:"images/blade_runner.png", answer:"Blade Runner" },
+
+            { img:"images/pirate_adventure.png", answer:"Pirate Adventure" },
+            { img:"images/she's_reading_part_2.png", answer:"She's Reading Part 2" },
+            { img:"images/7_king_speech.png", answer:"7 King Speech" },
+            { img:"images/rocketman_to_star.png", answer:"Rocketman To Star" },
+            { img:"images/charlie_chocolate_factory.png", answer:"Charlie Chocolate Factory" },
+            { img:"images/seven_ghost_in_the_house.png", answer:"Seven Ghost In The House" },
+            { img:"images/eye_love_alien.png", answer:"Eye Love Alien" },
+            { img:"images/3_alien_in_the_space.png", answer:"3 Alien In The Space" },
+            { img:"images/eye_love_small.png", answer:"Eye Love Small" },
+            { img:"images/now_you_see_me.png", answer:"Now You See Me" }
+
+        ],
+        "Music": [
+            { img:"images/movie_avengers.png", answer:"Avengers" },
+
+        ],
+        "Idioms": [
+            { img:"images/movie_avengers.png", answer:"Avengers" },
+        ],
+        "Animals": [
+            { img:"images/movie_avengers.png", answer:"Avengers" },
+        ],
+        "Food": [
+            { img:"images/movie_avengers.png", answer:"Avengers" },
+        ]
+    };
+
+    const imagesArray = puzzleSets[category];
+    let currentIndex = 0;
+
     const puzzleImage = document.getElementById("puzzleImage");
     const hintBtn = document.getElementById("hintBtn");
     const hintText = document.getElementById("hintText");
