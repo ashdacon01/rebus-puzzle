@@ -81,11 +81,15 @@ html, body { margin: 0; padding: 0; width: 100vw !important; max-width: 100vw !i
 </head>
 <body>
 
-<!-- READY POPUP -->
+<!-- READY POPUP WITH ADDED QUIT BUTTON -->
 <div id="readyPopup" class="ready-popup">
     <div class="ready-dialog">
         <p>Are you ready to play?</p>
-        <button id="startGameBtn">Start</button>
+
+        <div style="display:flex; flex-direction:column; gap:15px;">
+            <button id="startGameBtn">Start</button>
+            <button id="quitReadyBtn" style="background:#5a1f1f;">Quit</button>
+        </div>
     </div>
 </div>
 
@@ -176,12 +180,18 @@ function showMediumPopup() {
 document.addEventListener("DOMContentLoaded",()=>{
     const readyPopup = document.getElementById("readyPopup");
     const startBtn = document.getElementById("startGameBtn");
+    const quitReadyBtn = document.getElementById("quitReadyBtn");
     const puzzlePage = document.querySelector(".puzzle-page");
 
     startBtn.addEventListener("click",()=>{
         readyPopup.style.display = "none";
         puzzlePage.classList.add("show");
         initGame();
+    });
+
+    // NEW READY POPUP QUIT
+    quitReadyBtn.addEventListener("click", ()=>{
+        window.location.href = "categories.html";
     });
 });
 
